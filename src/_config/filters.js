@@ -1,6 +1,7 @@
 const { toISOString, formatDate } = require('./filters/dates');
 const { splitlines } = require('./filters/splitlines');
 const { slugify } = require('./filters/slugify');
+const { head } = require('./filters/head');
 const { getWebmentionsForUrl, getWebmentionsByType } = require('./filters/webmentions');
 
 module.exports = {
@@ -8,6 +9,7 @@ module.exports = {
   formatDate,
   splitlines,
   slugify,
+  head,
   getWebmentionsForUrl,
   getWebmentionsByType
 };
