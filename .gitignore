@@ -3,4 +3,5 @@ _site/
 .cache/
 dist/
 .env
+.dev.vars
 .DS_Store

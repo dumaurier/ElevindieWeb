@@ -26,5 +26,9 @@ module.exports = {
   // Webmention — set WEBMENTION_IO_TOKEN env var for build-time fetching
   webmention: {
     endpoint: 'https://webmention.io'
+  },
+  // Micropub endpoint — for publishing from Micropub clients
+  micropub: {
+    endpoint: '/micropub'
   }
 };

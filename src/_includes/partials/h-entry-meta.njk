@@ -1,13 +1,16 @@
 {% if title %}
   <h2 class="p-name">{{ title }}</h2>
 {% endif %}
+{% if bookmarkOf %}
+  <p><a class="u-bookmark-of" href="{{ bookmarkOf }}">{{ bookmarkOf }}</a></p>
+{% endif %}
 {% if summary %}
   <p class="p-summary">{{ summary }}</p>
 {% endif %}
 {% if tags %}
   <ul role="list">
     {% for tag in tags %}
-      {% if tag !== 'posts' %}
+      {% if tag !== 'posts' and tag !== 'notes' and tag !== 'bookmarks' %}
         <li><a class="p-category" href="/tags/{{ tag | slugify }}/">{{ tag }}</a></li>
       {% endif %}
     {% endfor %}

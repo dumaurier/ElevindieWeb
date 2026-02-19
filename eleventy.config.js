@@ -1,6 +1,6 @@
 const yaml = require('js-yaml');
 const rssPlugin = require('@11ty/eleventy-plugin-rss');
-const { getAllPosts, showInSitemap, tagList } = require('./src/_config/collections');
+const { getAllPosts, getAllNotes, getAllBookmarks, showInSitemap, tagList } = require('./src/_config/collections');
 const filters = require('./src/_config/filters');
 const { year } = require('./src/_config/shortcodes');
 const events = require('./src/_config/events');
@@ -22,6 +22,8 @@ module.exports = function (eleventyConfig) {
 
   // Collections
   eleventyConfig.addCollection('allPosts', getAllPosts);
+  eleventyConfig.addCollection('allNotes', getAllNotes);
+  eleventyConfig.addCollection('allBookmarks', getAllBookmarks);
   eleventyConfig.addCollection('showInSitemap', showInSitemap);
   eleventyConfig.addCollection('tagList', tagList);
 
