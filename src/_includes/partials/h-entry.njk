@@ -1,0 +1,12 @@
+<article class="h-entry">
+  {% include "partials/h-entry-meta.njk" %}
+  <div class="e-content">
+    {{ content | safe }}
+  </div>
+  <time class="dt-published" datetime="{{ date | toISOString }}">
+    {{ date | formatDate }}
+  </time>
+  <a class="u-url" href="{{ meta.url }}{{ page.url }}">Permalink</a>
+  <a class="p-author h-card" href="{{ meta.url }}">{{ meta.author.name }}</a>
+  {% include "partials/h-entry-interactions.njk" %}
+</article>

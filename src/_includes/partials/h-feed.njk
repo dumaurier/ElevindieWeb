@@ -1,0 +1,19 @@
+<div class="h-feed">
+  <p class="p-name">{{ feedTitle or meta.siteName }}</p>
+  {% for item in feedItems %}
+    <article class="h-entry">
+      {% if item.data.title %}
+        <h2 class="p-name">
+          <a class="u-url" href="{{ item.url }}">{{ item.data.title }}</a>
+        </h2>
+      {% endif %}
+      {% if item.data.summary %}
+        <p class="p-summary">{{ item.data.summary }}</p>
+      {% endif %}
+      <time class="dt-published" datetime="{{ item.date | toISOString }}">
+        {{ item.date | formatDate }}
+      </time>
+      <a class="p-author h-card" href="{{ meta.url }}">{{ meta.author.name }}</a>
+    </article>
+  {% endfor %}
+</div>

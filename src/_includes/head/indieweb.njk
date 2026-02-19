@@ -1,0 +1,6 @@
+  <link rel="authorization_endpoint" href="{{ meta.indieAuth.authorizationEndpoint }}">
+  <link rel="token_endpoint" href="{{ meta.indieAuth.tokenEndpoint }}">
+  <link rel="webmention" href="{{ meta.webmention.endpoint }}/{{ meta.domain }}/webmention">
+  {% for link in meta.author.relMe %}
+  <link rel="me" href="{{ link.url }}">
+  {% endfor %}

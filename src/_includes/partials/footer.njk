@@ -1,0 +1,13 @@
+<footer role="contentinfo">
+  {% include "partials/h-card.njk" %}
+  <nav aria-label="Footer navigation">
+    <ul role="list">
+      {% for item in navigation.bottom %}
+        <li>
+          <a href="{{ item.url }}"{{ helpers.getLinkActiveState(item.url, page.url) | safe }}>{{ item.text }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </nav>
+  <p>&copy; {% year %} {{ meta.author.name }}</p>
+</footer>

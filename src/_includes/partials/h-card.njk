@@ -1,0 +1,13 @@
+<div class="h-card" rel="me">
+  {% if meta.author.photo %}
+    <img class="u-photo" src="{{ meta.author.photo }}" alt="{{ meta.author.name }}" width="80" height="80">
+  {% endif %}
+  <a class="p-name u-url" href="{{ meta.url }}">{{ meta.author.name }}</a>
+  {% if meta.author.note %}
+    <p class="p-note">{{ meta.author.note }}</p>
+  {% endif %}
+  <a class="u-email" href="mailto:{{ meta.author.email }}">{{ meta.author.email }}</a>
+  {% for link in meta.author.relMe %}
+    <a class="u-url" href="{{ link.url }}" rel="me">{{ link.name }}</a>
+  {% endfor %}
+</div>

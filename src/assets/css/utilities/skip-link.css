@@ -1,0 +1,14 @@
+/* Skip link — visible only on focus for keyboard navigation */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: 0.5em 1em;
+  background: #000;
+  color: #fff;
+}
+
+.skip-link:focus {
+  left: 0;
+}

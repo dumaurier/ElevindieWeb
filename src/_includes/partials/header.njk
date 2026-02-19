@@ -1,0 +1,11 @@
+<header role="banner">
+  <nav aria-label="Primary navigation">
+    <ul role="list">
+      {% for item in navigation.top %}
+        <li>
+          <a href="{{ item.url }}"{{ helpers.getLinkActiveState(item.url, page.url) | safe }}>{{ item.text }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </nav>
+</header>

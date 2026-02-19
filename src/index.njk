@@ -1,0 +1,7 @@
+---
+layout: base
+title: Home
+---
+<h1>{{ title }}</h1>
+{% set feedItems = collections.allPosts %}
+{% include "partials/h-feed.njk" %}

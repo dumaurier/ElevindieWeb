@@ -1,0 +1,7 @@
+  <meta name="description" content="{{ description or meta.siteDescription }}">
+  <meta name="author" content="{{ meta.author.name }}">
+  <meta property="og:title" content="{{ title or meta.siteName }}">
+  <meta property="og:description" content="{{ description or meta.siteDescription }}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ meta.url }}{{ page.url }}">
+  <link rel="canonical" href="{{ meta.url }}{{ page.url }}">

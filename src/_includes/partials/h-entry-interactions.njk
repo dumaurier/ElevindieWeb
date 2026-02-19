@@ -1,0 +1,94 @@
+{% set pageUrl = meta.url + page.url %}
+{% set mentions = webmentions | getWebmentionsForUrl(pageUrl) %}
+{% set likes = mentions | getWebmentionsByType('like-of') %}
+{% set reposts = mentions | getWebmentionsByType('repost-of') %}
+{% set replies = mentions | getWebmentionsByType('in-reply-to') %}
+{% set bookmarks = mentions | getWebmentionsByType('bookmark-of') %}
+
+<section class="webmentions" data-webmention-url="{{ pageUrl }}" aria-label="Webmentions">
+  {% if likes.length > 0 %}
+  <section aria-label="Likes">
+    <h3>Likes ({{ likes.length }})</h3>
+    <ul role="list">
+      {% for like in likes %}
+      <li>
+        {% if like.author %}
+        <a href="{{ like.author.url }}">
+          {% if like.author.photo %}
+          <img src="{{ like.author.photo }}" alt="{{ like.author.name }}" width="32" height="32" loading="lazy">
+          {% endif %}
+          {{ like.author.name }}
+        </a>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  {% if reposts.length > 0 %}
+  <section aria-label="Reposts">
+    <h3>Reposts ({{ reposts.length }})</h3>
+    <ul role="list">
+      {% for repost in reposts %}
+      <li>
+        {% if repost.author %}
+        <a href="{{ repost.author.url }}">
+          {% if repost.author.photo %}
+          <img src="{{ repost.author.photo }}" alt="{{ repost.author.name }}" width="32" height="32" loading="lazy">
+          {% endif %}
+          {{ repost.author.name }}
+        </a>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  {% if bookmarks.length > 0 %}
+  <section aria-label="Bookmarks">
+    <h3>Bookmarks ({{ bookmarks.length }})</h3>
+    <ul role="list">
+      {% for bookmark in bookmarks %}
+      <li>
+        {% if bookmark.author %}
+        <a href="{{ bookmark.author.url }}">{{ bookmark.author.name }}</a>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  {% if replies.length > 0 %}
+  <section aria-label="Replies">
+    <h3>Replies ({{ replies.length }})</h3>
+    <ol role="list">
+      {% for reply in replies %}
+      <li class="h-cite">
+        {% if reply.author %}
+        <p>
+          <a class="p-author h-card" href="{{ reply.author.url }}">
+            {% if reply.author.photo %}
+            <img src="{{ reply.author.photo }}" alt="{{ reply.author.name }}" width="32" height="32" loading="lazy">
+            {% endif %}
+            {{ reply.author.name }}
+          </a>
+          <time class="dt-published" datetime="{{ reply.published }}">
+            {{ reply.published | formatDate }}
+          </time>
+        </p>
+        {% endif %}
+        {% if reply.content and reply.content.text %}
+        <p class="p-content">{{ reply.content.text }}</p>
+        {% endif %}
+        {% if reply.url %}
+        <a class="u-url" href="{{ reply.url }}">View original</a>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ol>
+  </section>
+  {% endif %}
+</section>

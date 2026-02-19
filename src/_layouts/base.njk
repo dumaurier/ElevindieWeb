@@ -1,0 +1,21 @@
+{% set assetHash = helpers.random() %}
+<!DOCTYPE html>
+<html lang="{{ meta.lang }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% if title %}{{ title }} | {{ meta.siteName }}{% else %}{{ meta.siteName }}{% endif %}</title>
+  {% include "head/css.njk" %}
+  {% include "head/meta-info.njk" %}
+  {% include "head/indieweb.njk" %}
+</head>
+<body class="{{ layout }}">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  {% include "partials/header.njk" %}
+  <main id="main-content">
+    {{ content | safe }}
+  </main>
+  {% include "partials/footer.njk" %}
+  <script src="/assets/js/webmentions.js" defer></script>
+</body>
+</html>
