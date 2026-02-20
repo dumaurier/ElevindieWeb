@@ -11,6 +11,8 @@
     {% for link in meta.author.relMe %}
       <a class="u-url" href="{{ link.url }}" rel="me">{{ link.name }}</a>
     {% endfor %}
-    <a class="u-email" href="mailto:{{ meta.author.email }}">{{ meta.author.email }}</a>
+    {% if meta.author.email %}
+      <a class="u-email" href="mailto:{{ meta.author.email }}">{{ meta.author.email }}</a>
+    {% endif %}
   </div>
 </div>

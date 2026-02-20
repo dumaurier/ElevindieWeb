@@ -9,7 +9,7 @@ module.exports = {
   lang: 'en',
   author: {
     name: 'Josh Vogt',
-    email: 'tearoffapp@proton.me',
+    email: '',
     website: url,
     photo: '/assets/images/avatar.jpg',
     note: 'Developer from Toronto.',
