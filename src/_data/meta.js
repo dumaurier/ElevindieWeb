@@ -18,11 +18,11 @@ module.exports = {
       { name: 'Mastodon', url: 'https://mastodon.social/@tearoff' },
       { name: 'BlueSky', url: 'https://bsky.app/profile/tearoff.bsky.social'}
     ],
+    // Add any other Social Media profiles you have...or don't...up to you
     social: [
-      { name: 'GitHub', url: 'https://github.com/dumaurier' },
+      { name: 'TikTok', url: 'https://www.tiktok.com/@inactionman_yyz' },
       { name: 'Mastodon', url: 'https://mastodon.social/@tearoff' },
       { name: 'BlueSky', url: 'https://bsky.app/profile/tearoff.bsky.social'}
-      // Add any other Social Media profiles you have
     ]
   },
   // IndieAuth endpoints — default to indieauth.com, swap if self-hosting
