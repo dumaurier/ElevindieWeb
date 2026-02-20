@@ -2,7 +2,7 @@ const yaml = require('js-yaml');
 const rssPlugin = require('@11ty/eleventy-plugin-rss');
 const { getAllPosts, getAllNotes, getAllBookmarks, getAllContent, showInSitemap, tagList } = require('./src/_config/collections');
 const filters = require('./src/_config/filters');
-const { year } = require('./src/_config/shortcodes');
+const { year, image } = require('./src/_config/shortcodes');
 const events = require('./src/_config/events');
 
 module.exports = function (eleventyConfig) {
@@ -10,6 +10,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPlugin(rssPlugin);
   // Build events
   eleventyConfig.on('eleventy.after', async function () {
+    await events.cssBundle();
     await events.svgToJpeg();
   });
 
@@ -39,6 +40,7 @@ module.exports = function (eleventyConfig) {
 
   // Shortcodes
   eleventyConfig.addShortcode('year', year);
+  eleventyConfig.addAsyncShortcode('image', image);
 
   // Per-page CSS bundling
   eleventyConfig.addBundle('css', { hoist: true });
@@ -48,8 +50,12 @@ module.exports = function (eleventyConfig) {
     return yaml.load(contents);
   });
 
-  // Passthrough copy
-  eleventyConfig.addPassthroughCopy('src/assets');
+  // Passthrough copy (CSS handled by cssBundle build event)
+  eleventyConfig.addPassthroughCopy('src/assets/fonts');
+  eleventyConfig.addPassthroughCopy('src/assets/images');
+  eleventyConfig.addPassthroughCopy('src/assets/js');
+  eleventyConfig.addPassthroughCopy('src/assets/svg');
+  eleventyConfig.addPassthroughCopy('src/assets/og-images');
 
   return {
     dir: {

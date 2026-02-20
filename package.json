@@ -21,6 +21,7 @@
     "yaml": "^2.8.2"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20260219.0"
+    "@cloudflare/workers-types": "^4.20260219.0",
+    "lightningcss": "^1.31.1"
   }
 }

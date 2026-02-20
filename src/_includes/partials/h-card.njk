@@ -1,6 +1,6 @@
 <div class="h-card" rel="me">
   {% if meta.author.photo %}
-    <img class="u-photo" src="{{ meta.author.photo }}" alt="{{ meta.author.name }}" width="80" height="80">
+    {% image "./src/assets/images/avatar.jpg", meta.author.name, { widths: [80, 160], sizes: "80px", class: "u-photo" } %}
   {% endif %}
   <a class="p-name u-url" href="{{ meta.url }}">{{ meta.author.name }}</a>
   {% if meta.author.note %}
