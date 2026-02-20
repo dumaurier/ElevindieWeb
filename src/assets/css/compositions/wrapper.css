@@ -1,1 +1,15 @@
 /* CUBE CSS: Wrapper — content width constraint */
+.wrapper {
+  max-width: var(--wrapper-max);
+  margin-inline: auto;
+  padding-inline: var(--space-m);
+}
+
+/* Semantic application */
+body > header,
+main,
+body > footer {
+  max-width: var(--wrapper-max);
+  margin-inline: auto;
+  padding-inline: var(--space-m);
+}

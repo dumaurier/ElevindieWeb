@@ -1,7 +1,75 @@
+/* @font-face — Atkinson Hyperlegible */
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  src: url('/assets/fonts/atkinson/atkinson-hyperlegible-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  src: url('/assets/fonts/atkinson/atkinson-hyperlegible-bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  src: url('/assets/fonts/atkinson/atkinson-hyperlegible-italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Design tokens */
 :root {
-  /* Colors — replace with your palette */
+  /* === Colors — DuoTone default === */
+  --color-bg: #8bbae7;
+  --color-fg: #240a37;
+  --color-accent: #e7e68b;
+  --color-border: #e78b8c;
+  --color-link: #0f0520;
+  --color-link-visited: #3d1a5c;
+  --color-focus: var(--color-accent);
+  --color-surface: oklch(from var(--color-fg) l c h / 0.08);
 
-  /* Typography */
+  /* === Typography === */
+  --font-body: 'Atkinson Hyperlegible', system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
 
-  /* Spacing */
+  /* Fluid type scale — min 320px, max 1140px */
+  --size-step-0: clamp(1rem, 0.96rem + 0.22vw, 1.125rem);
+  --size-step-1: clamp(1.125rem, 1.05rem + 0.37vw, 1.333rem);
+  --size-step-2: clamp(1.266rem, 1.14rem + 0.6vw, 1.578rem);
+  --size-step-3: clamp(1.424rem, 1.24rem + 0.93vw, 1.868rem);
+  --size-step-4: clamp(1.602rem, 1.33rem + 1.36vw, 2.209rem);
+
+  --line-height-base: 1.6;
+  --line-height-tight: 1.2;
+
+  /* === Spacing — fluid scale === */
+  --space-3xs: clamp(0.25rem, 0.23rem + 0.11vw, 0.3125rem);
+  --space-2xs: clamp(0.5rem, 0.46rem + 0.22vw, 0.625rem);
+  --space-xs: clamp(0.75rem, 0.69rem + 0.33vw, 0.9375rem);
+  --space-s: clamp(1rem, 0.91rem + 0.43vw, 1.25rem);
+  --space-m: clamp(1.5rem, 1.37rem + 0.65vw, 1.875rem);
+  --space-l: clamp(2rem, 1.83rem + 0.87vw, 2.5rem);
+  --space-xl: clamp(3rem, 2.74rem + 1.3vw, 3.75rem);
+  --space-2xl: clamp(4rem, 3.65rem + 1.74vw, 5rem);
+
+  /* === Measures === */
+  --measure: 65ch;
+  --wrapper-max: 75rem;
+}
+
+/* === Dark theme — invert bg/fg, keep accent/border === */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #240a37;
+    --color-fg: #8bbae7;
+    --color-link: #a8cef0;
+    --color-link-visited: #7ba4cc;
+  }
 }

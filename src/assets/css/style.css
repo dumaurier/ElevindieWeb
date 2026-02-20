@@ -1,5 +1,5 @@
 /* Layer order — explicit cascade control */
-@layer reset, variables, global, compositions, utilities;
+@layer reset, variables, global, compositions, blocks, utilities;
 
 @import 'reset.css' layer(reset);
 @import 'variables.css' layer(variables);
@@ -11,6 +11,19 @@
 @import 'compositions/wrapper.css' layer(compositions);
 @import 'compositions/repel.css' layer(compositions);
 @import 'compositions/region.css' layer(compositions);
+@import 'compositions/grid.css' layer(compositions);
+
+/* Blocks */
+@import 'blocks/header.css' layer(blocks);
+@import 'blocks/footer.css' layer(blocks);
+@import 'blocks/h-card.css' layer(blocks);
+@import 'blocks/h-entry.css' layer(blocks);
+@import 'blocks/h-feed.css' layer(blocks);
+@import 'blocks/webmentions.css' layer(blocks);
 
 /* Utilities */
 @import 'utilities/skip-link.css' layer(utilities);
+@import 'utilities/visually-hidden.css' layer(utilities);
+@import 'utilities/text.css' layer(utilities);
+@import 'utilities/color.css' layer(utilities);
+@import 'utilities/spacing.css' layer(utilities);

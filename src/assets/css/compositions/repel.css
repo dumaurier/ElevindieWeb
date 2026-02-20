@@ -1,1 +1,8 @@
 /* CUBE CSS: Repel — space-between with wrap */
+.repel {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--repel-gap, var(--space-m));
+}

@@ -1,1 +1,17 @@
 /* CUBE CSS: Flow — vertical rhythm */
+.flow > * + * {
+  margin-block-start: var(--flow-space, var(--space-m));
+}
+
+/* Semantic application */
+main > * + * {
+  margin-block-start: var(--flow-space, var(--space-m));
+}
+
+.e-content > * + * {
+  margin-block-start: var(--flow-space, var(--space-m));
+}
+
+.h-feed > * + * {
+  margin-block-start: var(--flow-space, var(--space-m));
+}

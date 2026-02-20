@@ -1,0 +1,16 @@
+/* Text utilities */
+.text-center { text-align: center; }
+.text-start  { text-align: start; }
+.text-end    { text-align: end; }
+
+.text-small { font-size: 0.875em; }
+.text-large { font-size: var(--size-step-1); }
+
+.font-bold    { font-weight: 700; }
+.font-normal  { font-weight: 400; }
+.font-italic  { font-style: italic; }
+
+.uppercase  { text-transform: uppercase; letter-spacing: 0.05em; }
+.capitalize { text-transform: capitalize; }
+
+.measure { max-width: var(--measure); }

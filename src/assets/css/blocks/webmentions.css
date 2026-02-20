@@ -1,0 +1,50 @@
+/* Webmentions */
+.webmentions {
+  margin-block-start: var(--space-xl);
+  border-block-start: 1px solid var(--color-border);
+  padding-block-start: var(--space-m);
+}
+
+.webmentions > * + * {
+  margin-block-start: var(--space-m);
+}
+
+/* Facepile (likes, reposts) */
+.webmentions section[aria-label="Likes"] ul,
+.webmentions section[aria-label="Reposts"] ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3xs);
+}
+
+.webmentions section[aria-label="Likes"] img,
+.webmentions section[aria-label="Reposts"] img {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Replies */
+.h-cite {
+  padding-block: var(--space-s);
+  border-block-end: 1px solid var(--color-border);
+}
+
+.h-cite > * + * {
+  margin-block-start: var(--space-2xs);
+}
+
+.h-cite img {
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 50%;
+  margin-inline-end: var(--space-3xs);
+}
+
+.h-cite .dt-published {
+  margin-inline-start: var(--space-xs);
+  font-size: 0.875em;
+}
+
+.h-cite .u-url {
+  font-size: 0.875em;
+}

@@ -5,8 +5,10 @@
   top: 0;
   z-index: 100;
   padding: 0.5em 1em;
-  background: #000;
-  color: #fff;
+  background: var(--color-fg);
+  color: var(--color-bg);
+  text-decoration: none;
+  font-weight: 700;
 }
 
 .skip-link:focus {

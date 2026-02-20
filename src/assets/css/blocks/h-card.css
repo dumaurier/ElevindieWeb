@@ -1,0 +1,20 @@
+/* h-card — author identity */
+.h-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.h-card .u-photo {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.h-card .p-note {
+  flex-basis: 100%;
+  font-size: 0.9em;
+  opacity: 0.85;
+}

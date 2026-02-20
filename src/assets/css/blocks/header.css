@@ -1,0 +1,5 @@
+/* Header */
+header[role="banner"] {
+  padding-block: var(--space-m);
+  border-block-end: 1px solid var(--color-border);
+}

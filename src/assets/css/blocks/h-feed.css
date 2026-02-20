@@ -1,0 +1,23 @@
+/* h-feed — post listing */
+.h-feed > .p-name {
+  font-size: var(--size-step-3);
+  font-weight: 700;
+  line-height: var(--line-height-tight);
+}
+
+.h-feed .h-entry {
+  padding-block: var(--space-m);
+  border-block-end: 1px solid var(--color-border);
+}
+
+.h-feed .h-entry:last-child {
+  border-block-end: none;
+}
+
+.h-feed .h-entry > * + * {
+  margin-block-start: var(--space-2xs);
+}
+
+.h-feed .p-author {
+  display: none;
+}

@@ -1,0 +1,12 @@
+/* Color utilities */
+.color-fg      { color: var(--color-fg); }
+.color-bg      { color: var(--color-bg); }
+.color-accent  { color: var(--color-accent); }
+.color-border  { color: var(--color-border); }
+.color-link    { color: var(--color-link); }
+
+.bg-fg      { background-color: var(--color-fg); }
+.bg-bg      { background-color: var(--color-bg); }
+.bg-accent  { background-color: var(--color-accent); }
+.bg-border  { background-color: var(--color-border); }
+.bg-surface { background-color: var(--color-surface); }

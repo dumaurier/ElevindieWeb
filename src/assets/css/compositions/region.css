@@ -1,1 +1,13 @@
 /* CUBE CSS: Region — vertical section spacing */
+.region {
+  padding-block: var(--space-xl);
+}
+
+/* Semantic application */
+main {
+  padding-block: var(--space-xl);
+}
+
+body > footer {
+  padding-block: var(--space-l);
+}

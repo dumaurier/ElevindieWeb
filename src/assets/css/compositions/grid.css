@@ -1,0 +1,52 @@
+/* CUBE CSS: Grid — auto-fill, named areas, subgrid */
+
+/* === Auto-fill grid === */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--grid-min, 15rem), 1fr));
+  gap: var(--grid-gap, var(--space-m));
+}
+
+/* === Named areas — holy grail === */
+.grid-areas {
+  display: grid;
+  gap: var(--grid-gap, var(--space-m));
+  grid-template-areas:
+    "header"
+    "main"
+    "sidebar"
+    "footer";
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 50rem) {
+  .grid-areas {
+    grid-template-areas:
+      "header  header"
+      "main    sidebar"
+      "footer  footer";
+    grid-template-columns: 1fr var(--sidebar-width, 20rem);
+  }
+}
+
+.grid-areas > [data-area="header"]  { grid-area: header; }
+.grid-areas > [data-area="main"]    { grid-area: main; }
+.grid-areas > [data-area="sidebar"] { grid-area: sidebar; }
+.grid-areas > [data-area="footer"]  { grid-area: footer; }
+
+/* === Subgrid === */
+.subgrid-rows {
+  display: grid;
+  grid-template-rows: subgrid;
+}
+
+.subgrid-columns {
+  display: grid;
+  grid-template-columns: subgrid;
+}
+
+.subgrid {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-template-columns: subgrid;
+}
