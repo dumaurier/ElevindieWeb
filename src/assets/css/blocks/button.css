@@ -1,0 +1,50 @@
+/* Button — solid default */
+button,
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-2xs) var(--space-m);
+  font: inherit;
+  font-weight: 700;
+  line-height: var(--line-height-tight);
+  color: var(--color-bg);
+  background-color: var(--color-fg);
+  border: 2px solid var(--color-fg);
+  border-radius: 3px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+button:hover,
+.button:hover {
+  opacity: 0.85;
+}
+
+button:active,
+.button:active {
+  opacity: 0.7;
+}
+
+/* Outlined variant */
+.button-outline {
+  color: var(--color-fg);
+  background-color: transparent;
+  border: 2px solid var(--color-fg);
+}
+
+.button-outline:hover {
+  background-color: var(--color-surface);
+  opacity: 1;
+}
+
+.button-outline:active {
+  opacity: 0.7;
+}
+
+/* Disabled state */
+button:disabled,
+.button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

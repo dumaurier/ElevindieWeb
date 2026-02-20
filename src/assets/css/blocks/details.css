@@ -1,0 +1,33 @@
+/* Details / Summary */
+details {
+  padding: var(--space-s);
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
+}
+
+summary {
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+
+summary::before {
+  content: "\25B6";
+  display: inline-block;
+  margin-inline-end: var(--space-2xs);
+  font-size: 0.75em;
+  transition: transform 0.2s ease;
+}
+
+details[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+details > *:not(summary) {
+  margin-block-start: var(--space-s);
+}
+
+/* Remove default marker in WebKit/Blink */
+summary::-webkit-details-marker {
+  display: none;
+}

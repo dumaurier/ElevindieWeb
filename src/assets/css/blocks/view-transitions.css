@@ -1,0 +1,4 @@
+/* View Transitions — cross-document navigation */
+@view-transition {
+  navigation: auto;
+}

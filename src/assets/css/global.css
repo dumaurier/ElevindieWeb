@@ -23,12 +23,6 @@ p {
   max-width: var(--measure);
 }
 
-blockquote {
-  border-inline-start: 3px solid var(--color-border);
-  padding-inline-start: var(--space-s);
-  font-style: italic;
-}
-
 /* === Links === */
 a {
   color: var(--color-link);

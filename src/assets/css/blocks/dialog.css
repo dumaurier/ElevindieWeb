@@ -1,0 +1,32 @@
+/* Dialog — basic modal */
+dialog {
+  max-width: min(90vw, 40rem);
+  padding: var(--space-l);
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
+  color: var(--color-fg);
+  background-color: var(--color-bg);
+}
+
+dialog::backdrop {
+  background-color: oklch(from var(--color-fg) l c h / 0.6);
+}
+
+dialog > * + * {
+  margin-block-start: var(--space-m);
+}
+
+/* Entry animation */
+@starting-style {
+  dialog[open] {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}
+
+dialog[open] {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.2s ease, transform 0.2s ease,
+    display 0.2s ease allow-discrete;
+}

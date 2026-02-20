@@ -20,6 +20,13 @@
 @import 'blocks/h-entry.css' layer(blocks);
 @import 'blocks/h-feed.css' layer(blocks);
 @import 'blocks/webmentions.css' layer(blocks);
+@import 'blocks/blockquote.css' layer(blocks);
+@import 'blocks/button.css' layer(blocks);
+@import 'blocks/figure.css' layer(blocks);
+@import 'blocks/details.css' layer(blocks);
+@import 'blocks/dialog.css' layer(blocks);
+@import 'blocks/popover.css' layer(blocks);
+@import 'blocks/view-transitions.css' layer(blocks);
 
 /* Utilities */
 @import 'utilities/skip-link.css' layer(utilities);

@@ -1,0 +1,25 @@
+/* Blockquote */
+blockquote {
+  border-inline-start: 3px solid var(--color-border);
+  padding-inline-start: var(--space-m);
+  padding-block: var(--space-xs);
+  font-style: italic;
+}
+
+blockquote > * + * {
+  margin-block-start: var(--space-s);
+}
+
+blockquote cite,
+blockquote figcaption {
+  display: block;
+  font-style: normal;
+  font-size: 0.875em;
+  opacity: 0.8;
+  margin-block-start: var(--space-s);
+}
+
+blockquote cite::before,
+blockquote figcaption::before {
+  content: "\2014\00a0";
+}
