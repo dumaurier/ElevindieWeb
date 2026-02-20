@@ -1,13 +1,39 @@
 ---
-background: '#000000'
-text: '#ffffff'
 pagination:
-  data: collections.allPosts
+  data: collections.allContent
   size: 1
-  alias: post
-permalink: '/assets/og-images/{{ post.data.title | slugify }}-preview.svg'
+  alias: item
+permalink: '/assets/og-images/{{ item.fileSlug }}-preview.svg'
 eleventyExcludeFromCollections: true
 ---
+{%- if 'notes' in item.data.tags -%}
+  {%- set postType = 'Note' -%}
+  {%- set pillWidth = 88 -%}
+{%- elseif 'bookmarks' in item.data.tags -%}
+  {%- set postType = 'Bookmark' -%}
+  {%- set pillWidth = 138 -%}
+{%- else -%}
+  {%- set postType = 'Post' -%}
+  {%- set pillWidth = 82 -%}
+{%- endif -%}
+{%- if item.data.title -%}
+  {%- set displayTitle = item.data.title -%}
+{%- else -%}
+  {%- set displayTitle = item.templateContent | striptags | truncate(100, false, '…') -%}
+{%- endif -%}
+{%- set titleInLines = displayTitle | splitlines(25) -%}
+{%- set numberOfLines = titleInLines.length -%}
+{%- if numberOfLines == 1 -%}
+  {%- set verticalStartingPoint = 310 -%}
+{%- elseif numberOfLines == 2 -%}
+  {%- set verticalStartingPoint = 270 -%}
+{%- elseif numberOfLines == 3 -%}
+  {%- set verticalStartingPoint = 230 -%}
+{%- elseif numberOfLines == 4 -%}
+  {%- set verticalStartingPoint = 200 -%}
+{%- else -%}
+  {%- set verticalStartingPoint = 170 -%}
+{%- endif -%}
 <svg
   width="1200"
   height="630"
@@ -15,44 +41,44 @@ eleventyExcludeFromCollections: true
   version="1.1"
   xmlns="http://www.w3.org/2000/svg"
 >
-  {% set titleInLines = post.data.title | splitlines(22) %}
-  {% set numberOfLines = titleInLines.length %}
-  {% if numberOfLines == 1 %}
-    {% set verticalStartingPoint = 340 %}
-  {% elseif numberOfLines == 2 %}
-    {% set verticalStartingPoint = 290 %}
-  {% elseif numberOfLines == 3 %}
-    {% set verticalStartingPoint = 250 %}
-  {% elseif numberOfLines == 4 %}
-    {% set verticalStartingPoint = 210 %}
-  {% elseif numberOfLines == 5 %}
-    {% set verticalStartingPoint = 170 %}
-  {% endif %}
+  <!-- border frame -->
+  <rect width="1200" height="630" fill="#e78b8c" />
+  <rect x="12" y="12" width="1176" height="606" fill="#8bbae7" />
 
-  <rect width="100%" height="100%" fill="{{ background }}" />
+  <!-- type label pill -->
+  <rect x="80" y="52" rx="18" ry="18" width="{{ pillWidth }}" height="36" fill="#e7e68b" />
+  <text
+    font-family="system-ui, sans-serif"
+    font-size="18"
+    font-weight="700"
+    fill="#240a37"
+    text-anchor="middle"
+    dominant-baseline="central"
+  >
+    <tspan x="{{ 80 + pillWidth / 2 }}" y="70">{{ postType }}</tspan>
+  </text>
 
   <!-- date -->
   <text
     font-family="system-ui, sans-serif"
     font-size="22"
     font-weight="500"
-    fill="{{ text }}"
+    fill="#240a37"
+    text-anchor="end"
   >
-    <tspan x="80" y="{{ verticalStartingPoint - 120 }}">
-      {{ post.date | formatDate('DD / MM / YYYY') }}
-    </tspan>
+    <tspan x="1120" y="76">{{ item.date | formatDate('DD / MM / YYYY') }}</tspan>
   </text>
 
   <!-- title -->
   <text
     font-family="system-ui, sans-serif"
-    font-size="72"
+    font-size="64"
     font-weight="700"
-    fill="{{ text }}"
+    fill="#240a37"
   >
-    {% for line in titleInLines %}
-      <tspan x="80" y="{{ verticalStartingPoint - 20 + loop.index0 * 85 }}">{{ line }}</tspan>
-    {% endfor %}
+    {%- for line in titleInLines %}
+    <tspan x="80" y="{{ verticalStartingPoint + loop.index0 * 78 }}">{{ line }}</tspan>
+    {%- endfor %}
   </text>
 
   <!-- site name -->
@@ -60,8 +86,19 @@ eleventyExcludeFromCollections: true
     font-family="system-ui, sans-serif"
     font-size="22"
     font-weight="500"
-    fill="{{ text }}"
+    fill="#240a37"
   >
     <tspan x="80" y="580">{{ meta.siteName }}</tspan>
+  </text>
+
+  <!-- author -->
+  <text
+    font-family="system-ui, sans-serif"
+    font-size="22"
+    font-weight="500"
+    fill="#240a37"
+    text-anchor="end"
+  >
+    <tspan x="1120" y="580">{{ meta.author.name }}</tspan>
   </text>
 </svg>

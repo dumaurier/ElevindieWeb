@@ -1,0 +1,10 @@
+---
+layout: base
+title: Posts
+permalink: /posts/
+description: All blog posts.
+---
+<h1>{{ title }}</h1>
+{% set feedItems = collections.allPosts %}
+{% set feedTitle = 'Posts' %}
+{% include "partials/h-feed.njk" %}

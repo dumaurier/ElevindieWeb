@@ -32,4 +32,14 @@ function tagList(collectionApi) {
   return Array.from(tags).sort();
 }
 
-module.exports = { getAllPosts, getAllNotes, getAllBookmarks, showInSitemap, tagList };
+function getAllContent(collectionApi) {
+  return [
+    ...collectionApi.getFilteredByGlob('src/posts/**/*.md'),
+    ...collectionApi.getFilteredByGlob('src/notes/**/*.md'),
+    ...collectionApi.getFilteredByGlob('src/bookmarks/**/*.md')
+  ].sort(function (a, b) {
+    return b.date - a.date;
+  });
+}
+
+module.exports = { getAllPosts, getAllNotes, getAllBookmarks, getAllContent, showInSitemap, tagList };

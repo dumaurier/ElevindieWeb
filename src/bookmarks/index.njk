@@ -1,0 +1,10 @@
+---
+layout: base
+title: Bookmarks
+permalink: /bookmarks/
+description: Links worth saving.
+---
+<h1>{{ title }}</h1>
+{% set feedItems = collections.allBookmarks %}
+{% set feedTitle = 'Bookmarks' %}
+{% include "partials/h-feed.njk" %}

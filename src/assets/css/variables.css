@@ -40,11 +40,14 @@
   --font-mono: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
 
   /* Fluid type scale — min 320px, max 1140px */
+  --size-step--1: clamp(0.889rem, 0.86rem + 0.12vw, 0.95rem);
   --size-step-0: clamp(1rem, 0.96rem + 0.22vw, 1.125rem);
   --size-step-1: clamp(1.125rem, 1.05rem + 0.37vw, 1.333rem);
   --size-step-2: clamp(1.266rem, 1.14rem + 0.6vw, 1.578rem);
   --size-step-3: clamp(1.424rem, 1.24rem + 0.93vw, 1.868rem);
   --size-step-4: clamp(1.602rem, 1.33rem + 1.36vw, 2.209rem);
+  --size-step-5: clamp(1.802rem, 1.48rem + 1.59vw, 2.615rem);
+  --size-step-6: clamp(2.027rem, 1.61rem + 2.07vw, 3.096rem);
 
   --line-height-base: 1.6;
   --line-height-tight: 1.2;

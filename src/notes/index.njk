@@ -1,0 +1,10 @@
+---
+layout: base
+title: Notes
+permalink: /notes/
+description: Short notes and status updates.
+---
+<h1>{{ title }}</h1>
+{% set feedItems = collections.allNotes %}
+{% set feedTitle = 'Notes' %}
+{% include "partials/h-feed.njk" %}

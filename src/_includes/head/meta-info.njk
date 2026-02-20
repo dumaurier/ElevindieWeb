@@ -1,7 +1,23 @@
   <meta name="description" content="{{ description or meta.siteDescription }}">
   <meta name="author" content="{{ meta.author.name }}">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#8bbae7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#240a37" media="(prefers-color-scheme: dark)">
   <meta property="og:title" content="{{ title or meta.siteName }}">
   <meta property="og:description" content="{{ description or meta.siteDescription }}">
   <meta property="og:type" content="website">
   <meta property="og:url" content="{{ meta.url }}{{ page.url }}">
+  <meta property="og:site_name" content="{{ meta.siteName }}">
+  {% if tags and ('posts' in tags or 'notes' in tags or 'bookmarks' in tags) %}
+  <meta property="og:image" content="{{ meta.url }}/assets/og-images/{{ page.fileSlug }}-preview.jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="{{ meta.url }}/assets/og-images/{{ page.fileSlug }}-preview.jpeg">
+  {% else %}
+  <meta name="twitter:card" content="summary">
+  {% endif %}
   <link rel="canonical" href="{{ meta.url }}{{ page.url }}">
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" href="/assets/images/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">

@@ -10,17 +10,17 @@ eleventyExcludeFromCollections: true
     <link>{{ meta.url }}/</link>
     <atom:link href="{{ meta.url }}/rss.xml" rel="self" type="application/rss+xml"/>
     <language>{{ meta.lang }}</language>
-    <lastBuildDate>{{ collections.allPosts | getNewestCollectionItemDate | dateToRfc822 }}</lastBuildDate>
-    {%- for post in collections.allPosts | head(20) %}
+    <lastBuildDate>{{ collections.allContent | getNewestCollectionItemDate | dateToRfc822 }}</lastBuildDate>
+    {%- for item in collections.allContent | head(20) %}
     <item>
-      <title>{{ post.data.title }}</title>
-      <link>{{ post.url | absoluteUrl(meta.url) }}</link>
-      <guid isPermaLink="true">{{ post.url | absoluteUrl(meta.url) }}</guid>
-      <pubDate>{{ post.date | dateToRfc822 }}</pubDate>
-      {%- if post.data.description %}
-      <description>{{ post.data.description }}</description>
+      <title>{{ item.data.title or (item.templateContent | striptags | truncate(80, false, '…')) }}</title>
+      <link>{{ item.url | absoluteUrl(meta.url) }}</link>
+      <guid isPermaLink="true">{{ item.url | absoluteUrl(meta.url) }}</guid>
+      <pubDate>{{ item.date | dateToRfc822 }}</pubDate>
+      {%- if item.data.description %}
+      <description>{{ item.data.description }}</description>
       {%- endif %}
-      <content:encoded>{{ post.templateContent | htmlToAbsoluteUrls(post.url | absoluteUrl(meta.url)) }}</content:encoded>
+      <content:encoded>{{ item.templateContent | htmlToAbsoluteUrls(item.url | absoluteUrl(meta.url)) }}</content:encoded>
     </item>
     {%- endfor %}
   </channel>

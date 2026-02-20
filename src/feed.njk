@@ -8,22 +8,22 @@ eleventyExcludeFromCollections: true
   <subtitle>{{ meta.siteDescription }}</subtitle>
   <link href="{{ meta.url }}/feed.xml" rel="self" type="application/atom+xml"/>
   <link href="{{ meta.url }}/" rel="alternate" type="text/html"/>
-  <updated>{{ collections.allPosts | getNewestCollectionItemDate | dateToRfc3339 }}</updated>
+  <updated>{{ collections.allContent | getNewestCollectionItemDate | dateToRfc3339 }}</updated>
   <id>{{ meta.url }}/</id>
   <author>
     <name>{{ meta.author.name }}</name>
     <email>{{ meta.author.email }}</email>
   </author>
-  {%- for post in collections.allPosts | head(20) %}
+  {%- for item in collections.allContent | head(20) %}
   <entry>
-    <title>{{ post.data.title }}</title>
-    <link href="{{ post.url | absoluteUrl(meta.url) }}" rel="alternate" type="text/html"/>
-    <id>{{ post.url | absoluteUrl(meta.url) }}</id>
-    <updated>{{ post.date | dateToRfc3339 }}</updated>
-    {%- if post.data.description %}
-    <summary>{{ post.data.description }}</summary>
+    <title>{{ item.data.title or (item.templateContent | striptags | truncate(80, false, '…')) }}</title>
+    <link href="{{ item.url | absoluteUrl(meta.url) }}" rel="alternate" type="text/html"/>
+    <id>{{ item.url | absoluteUrl(meta.url) }}</id>
+    <updated>{{ item.date | dateToRfc3339 }}</updated>
+    {%- if item.data.description %}
+    <summary>{{ item.data.description }}</summary>
     {%- endif %}
-    <content type="html">{{ post.templateContent | htmlToAbsoluteUrls(post.url | absoluteUrl(meta.url)) }}</content>
+    <content type="html">{{ item.templateContent | htmlToAbsoluteUrls(item.url | absoluteUrl(meta.url)) }}</content>
   </entry>
   {%- endfor %}
 </feed>

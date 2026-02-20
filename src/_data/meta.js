@@ -4,18 +4,18 @@ const domain = new URL(url).hostname;
 module.exports = {
   url,
   domain,
-  siteName: 'pants pants pants',
-  siteDescription: 'pants pants pants',
+  siteName: 'ElevindieWeb Starter',
+  siteDescription: 'An Eleventy Starter for IndieWeb',
   lang: 'en',
   author: {
-    name: 'pants pants pants',
-    email: 'pants@pants.pants',
+    name: 'Josh',
+    email: 'tearoffapp@proton.me',
     website: url,
-    photo: '/assets/images/pants.jpg',
-    note: 'pants pants pants',
+    photo: '/assets/images/avatar.jpg',
+    note: 'Josh made this with help from others',
     relMe: [
-      { name: 'GitHub', url: 'https://github.com/pants' },
-      { name: 'Mastodon', url: 'https://mastodon.social/@pants' }
+      { name: 'GitHub', url: 'https://github.com/dumaurier' },
+      { name: 'Mastodon', url: 'https://mastodon.social/@tearoff' }
     ]
   },
   // IndieAuth endpoints — default to indieauth.com, swap if self-hosting

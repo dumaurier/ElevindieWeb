@@ -6,6 +6,10 @@
         <h2 class="p-name">
           <a class="u-url" href="{{ item.url }}">{{ item.data.title }}</a>
         </h2>
+      {% else %}
+        <p class="e-content">
+          <a class="u-url" href="{{ item.url }}">{{ item.templateContent | striptags | truncate(120, false, '…') }}</a>
+        </p>
       {% endif %}
       {% if item.data.summary %}
         <p class="p-summary">{{ item.data.summary }}</p>
