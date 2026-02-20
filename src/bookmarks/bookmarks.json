@@ -1,4 +1,6 @@
 {
   "layout": "post",
-  "tags": ["bookmarks"]
+  "tags": ["bookmarks"],
+  "contentType": "Bookmark",
+  "contentUrl": "/bookmarks/"
 }

@@ -6,14 +6,12 @@ pagination:
 permalink: '/assets/og-images/{{ item.fileSlug }}-preview.svg'
 eleventyExcludeFromCollections: true
 ---
-{%- if 'notes' in item.data.tags -%}
-  {%- set postType = 'Note' -%}
-  {%- set pillWidth = 88 -%}
-{%- elseif 'bookmarks' in item.data.tags -%}
-  {%- set postType = 'Bookmark' -%}
+{%- set postType = item.data.contentType -%}
+{%- if postType == 'Bookmark' -%}
   {%- set pillWidth = 138 -%}
+{%- elseif postType == 'Note' -%}
+  {%- set pillWidth = 88 -%}
 {%- else -%}
-  {%- set postType = 'Post' -%}
   {%- set pillWidth = 82 -%}
 {%- endif -%}
 {%- if item.data.title -%}

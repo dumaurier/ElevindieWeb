@@ -18,6 +18,7 @@
         {{ item.date | formatDate }}
       </time>
       <a class="p-author h-card" href="{{ meta.url }}">{{ meta.author.name }}</a>
+      <a href="{{ item.data.contentUrl }}">{{ item.data.contentType }}</a>
     </article>
   {% endfor %}
 </div>

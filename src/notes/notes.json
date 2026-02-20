@@ -1,4 +1,6 @@
 {
   "layout": "post",
-  "tags": ["notes"]
+  "tags": ["notes"],
+  "contentType": "Note",
+  "contentUrl": "/notes/"
 }

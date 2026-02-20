@@ -1,8 +1,9 @@
 module.exports = {
   top: [
     { text: 'Home', url: '/' },
-    { text: 'About', url: '/about/' },
-    { text: 'Contact', url: '/contact/' },
+    { text: 'Posts', url: '/posts/' },
+    { text: 'Notes', url: '/notes/' },
+    { text: 'Bookmarks', url: '/bookmarks/' },
     { text: 'Blogroll', url: '/blogroll/' }
   ],
   bottom: [

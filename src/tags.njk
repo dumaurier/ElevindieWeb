@@ -1,0 +1,14 @@
+---
+pagination:
+  data: collections.tagList
+  size: 1
+  alias: tag
+permalink: /tags/{{ tag | slugify }}/
+layout: base
+eleventyComputed:
+  title: "{{ tag }}"
+---
+<h1>{{ tag }}</h1>
+{% set feedItems = collections[tag] | reverse %}
+{% set feedTitle = tag %}
+{% include "partials/h-feed.njk" %}
