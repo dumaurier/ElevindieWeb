@@ -1,7 +1,7 @@
 <footer role="contentinfo">
   {% include "partials/h-card.njk" %}
   <nav aria-label="Footer navigation">
-    <ul role="list">
+    <ul class="cluster" role="list">
       {% for item in navigation.bottom %}
         <li>
           <a href="{{ item.url }}"{{ helpers.getLinkActiveState(item.url, page.url) | safe }}>{{ item.text }}</a>

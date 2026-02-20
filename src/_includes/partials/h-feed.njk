@@ -17,8 +17,10 @@
       <time class="dt-published" datetime="{{ item.date | toISOString }}">
         {{ item.date | formatDate }}
       </time>
-      <a class="p-author h-card" href="{{ meta.url }}">{{ meta.author.name }}</a>
-      <a href="{{ item.data.contentUrl }}">{{ item.data.contentType }}</a>
+      <div class="cluster">
+        <a class="button tag" href="{{ item.data.contentUrl }}">{{ item.data.contentType }}</a>
+        <a class="p-author h-card" href="{{ meta.url }}">{{ meta.author.name }}</a>
+      </div>
     </article>
   {% endfor %}
 </div>

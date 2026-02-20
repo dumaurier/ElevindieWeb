@@ -6,8 +6,11 @@
   {% if meta.author.note %}
     <p class="p-note">{{ meta.author.note }}</p>
   {% endif %}
-  <a class="u-email" href="mailto:{{ meta.author.email }}">{{ meta.author.email }}</a>
-  {% for link in meta.author.relMe %}
-    <a class="u-url" href="{{ link.url }}" rel="me">{{ link.name }}</a>
-  {% endfor %}
+  
+  <div class="cluster">
+    {% for link in meta.author.relMe %}
+      <a class="u-url" href="{{ link.url }}" rel="me">{{ link.name }}</a>
+    {% endfor %}
+    <a class="u-email" href="mailto:{{ meta.author.email }}">{{ meta.author.email }}</a>
+  </div>
 </div>
