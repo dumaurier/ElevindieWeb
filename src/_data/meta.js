@@ -15,14 +15,14 @@ module.exports = {
     note: 'Developer from Toronto.',
     relMe: [
       { name: 'GitHub', url: 'https://github.com/dumaurier' },
-      { name: 'Mastodon', url: 'https://mastodon.social/@tearoff' },
-      { name: 'BlueSky', url: 'https://bsky.app/profile/tearoff.bsky.social'}
+      { name: 'Mastodon', url: 'https://mastodon.social/@joshuavogt' },
+      { name: 'BlueSky', url: 'https://bsky.app/profile/joshuavogt.bsky.social'}
     ],
     // Add any other Social Media profiles you have...or don't...up to you
     social: [
       { name: 'TikTok', url: 'https://www.tiktok.com/@inactionman_yyz' },
-      { name: 'Mastodon', url: 'https://mastodon.social/@tearoff' },
-      { name: 'BlueSky', url: 'https://bsky.app/profile/tearoff.bsky.social'}
+      { name: 'Mastodon', url: 'https://mastodon.social/@joshuavogt' },
+      { name: 'BlueSky', url: 'https://bsky.app/profile/joshuavogt.bsky.social'}
     ]
   },
   // IndieAuth endpoints — default to indieauth.com, swap if self-hosting

@@ -2,12 +2,19 @@ name = "11ndtyweb"
 compatibility_date = "2024-01-01"
 pages_build_output_dir = "_site"
 
-# Environment variables — set via Cloudflare dashboard or .dev.vars locally.
-# Required:
+# Non-secret environment variables
+# URL is used at build time by Eleventy (src/_data/meta.js)
+# The rest are used at runtime by the Micropub function
+[vars]
+URL = "https://elevindieweb.pages.dev"
+SITE_URL = "https://elevindieweb.pages.dev"
+ME = "https://elevindieweb.pages.dev/"
+GITHUB_REPO_OWNER = "dumaurier"
+GITHUB_REPO_NAME = "ElevindieWeb"
+GITHUB_BRANCH = "main"
+TOKEN_ENDPOINT = "https://tokens.indieauth.com/token"
+
+# Secrets — set via Cloudflare dashboard (Settings > Variables and Secrets)
+# These cannot go in wrangler.toml because they are sensitive:
 #   GITHUB_TOKEN        — GitHub personal access token with repo scope
-#   GITHUB_REPO_OWNER   — GitHub username or org
-#   GITHUB_REPO_NAME    — Repository name
-#   GITHUB_BRANCH       — Target branch (e.g. "main")
-#   SITE_URL            — Production URL (e.g. "https://example.com")
-#   TOKEN_ENDPOINT      — IndieAuth token endpoint (e.g. "https://tokens.indieauth.com/token")
-#   ME                  — Your site identity URL (e.g. "https://example.com/")
+#   WEBMENTION_IO_TOKEN — webmention.io API token (optional, for build-time fetching)
