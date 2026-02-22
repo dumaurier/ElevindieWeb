@@ -9,19 +9,19 @@ module.exports = {
   lang: 'en',
   author: {
     name: 'Josh Vogt',
-    email: '',
+    email: 'joshcvogt@proton.me',
     website: url,
     photo: '/assets/images/avatar.jpg',
     note: 'Developer from Toronto.',
     relMe: [
       { name: 'GitHub', url: 'https://github.com/dumaurier' },
-      { name: 'Mastodon', url: 'https://mastodon.social/@joshuavogt' },
+      { name: 'Mastodon', url: 'https://mastodon.social/@joshvogt' },
       { name: 'BlueSky', url: 'https://bsky.app/profile/joshuavogt.bsky.social'}
     ],
     // Add any other Social Media profiles you have...or don't...up to you
     social: [
       { name: 'TikTok', url: 'https://www.tiktok.com/@inactionman_yyz' },
-      { name: 'Mastodon', url: 'https://mastodon.social/@joshuavogt' },
+      { name: 'Mastodon', url: 'https://mastodon.social/@joshvogt' },
       { name: 'BlueSky', url: 'https://bsky.app/profile/joshuavogt.bsky.social'}
     ]
   },
