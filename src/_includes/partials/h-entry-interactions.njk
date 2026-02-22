@@ -4,6 +4,7 @@
 {% set reposts = mentions | getWebmentionsByType('repost-of') %}
 {% set replies = mentions | getWebmentionsByType('in-reply-to') %}
 {% set bookmarks = mentions | getWebmentionsByType('bookmark-of') %}
+{% set linkedMentions = mentions | getWebmentionsByType('mention-of') %}
 
 <section class="webmentions" data-webmention-url="{{ pageUrl }}" aria-label="Webmentions">
   {% if likes.length > 0 %}
@@ -58,6 +59,37 @@
       </li>
       {% endfor %}
     </ul>
+  </section>
+  {% endif %}
+
+  {% if linkedMentions.length > 0 %}
+  <section aria-label="Mentions">
+    <h3>Mentions ({{ linkedMentions.length }})</h3>
+    <ol role="list">
+      {% for mention in linkedMentions %}
+      <li class="h-cite">
+        {% if mention.author %}
+        <p>
+          <a class="p-author h-card" href="{{ mention.author.url }}">
+            {% if mention.author.photo %}
+            <img src="{{ mention.author.photo }}" alt="{{ mention.author.name }}" width="32" height="32" loading="lazy">
+            {% endif %}
+            {{ mention.author.name }}
+          </a>
+          <time class="dt-published" datetime="{{ mention.published }}">
+            {{ mention.published | formatDate }}
+          </time>
+        </p>
+        {% endif %}
+        {% if mention.content and mention.content.text %}
+        <p class="p-content">{{ mention.content.text }}</p>
+        {% endif %}
+        {% if mention.url %}
+        <a class="u-url" href="{{ mention.url }}">View original</a>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ol>
   </section>
   {% endif %}
 

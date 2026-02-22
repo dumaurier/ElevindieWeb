@@ -17,12 +17,14 @@
       var reposts = filterByType(mentions, 'repost-of');
       var replies = filterByType(mentions, 'in-reply-to');
       var bookmarks = filterByType(mentions, 'bookmark-of');
+      var linkedMentions = filterByType(mentions, 'mention-of');
 
       var html = '';
       html += renderFacepile('Likes', likes);
       html += renderFacepile('Reposts', reposts);
       html += renderFacepile('Bookmarks', bookmarks);
-      html += renderReplies(replies);
+      html += renderReplies('Mentions', linkedMentions);
+      html += renderReplies('Replies', replies);
 
       if (html) {
         container.innerHTML = html;
@@ -61,10 +63,10 @@
     return html;
   }
 
-  function renderReplies(items) {
+  function renderReplies(label, items) {
     if (items.length === 0) return '';
-    var html = '<section aria-label="Replies">';
-    html += '<h3>Replies (' + items.length + ')</h3>';
+    var html = '<section aria-label="' + label + '">';
+    html += '<h3>' + label + ' (' + items.length + ')</h3>';
     html += '<ol role="list">';
     items.forEach(function (item) {
       html += '<li class="h-cite">';
