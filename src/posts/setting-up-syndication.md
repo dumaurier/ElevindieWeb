@@ -58,7 +58,7 @@ Open `wrangler.toml` and uncomment the Bluesky lines in the `[vars]` section:
 BLUESKY_HANDLE = "yourname.bsky.social"
 ```
 
-Replace `yourname.bsky.social` with your actual Bluesky handle. If you're using a custom domain as your handle, use that instead (e.g. `example.com`).
+Replace `yourname.bsky.social` with your actual Bluesky handle — without the `@` sign. Just the domain-style handle. If you're using a custom domain as your handle, use that instead (e.g. `example.com`).
 
 The `BLUESKY_PDS_URL` line can stay commented out — it defaults to `https://bsky.social`, which is correct unless you're running your own Personal Data Server.
 

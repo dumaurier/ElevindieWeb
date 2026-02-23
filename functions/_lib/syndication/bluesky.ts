@@ -31,7 +31,8 @@ export async function syndicateToBluesky(
     }
 
     const pdsUrl = env.BLUESKY_PDS_URL || "https://bsky.social";
-    const session = await createSession(pdsUrl, env.BLUESKY_HANDLE, env.BLUESKY_APP_PASSWORD);
+    const handle = env.BLUESKY_HANDLE.replace(/^@/, "");
+    const session = await createSession(pdsUrl, handle, env.BLUESKY_APP_PASSWORD);
     const facets = buildLinkFacets(text, url);
 
     const response = await fetch(`${pdsUrl}/xrpc/com.atproto.repo.createRecord`, {
