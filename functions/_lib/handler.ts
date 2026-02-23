@@ -6,9 +6,15 @@ import { createNote, updateNote, deleteNote } from "./handlers/notes.js";
 import { createBookmark, updateBookmark, deleteBookmark } from "./handlers/bookmarks.js";
 import { handleQuery } from "./handlers/query.js";
 import { resolveUrl } from "./mapping/url-to-path.js";
+import { syndicate } from "./syndication/syndicate.js";
+import type { SyndicationContent } from "./syndication/syndicate.js";
 import type { Env } from "./github/types.js";
 
-export async function handleMicropub(request: Request, env: Env): Promise<Response> {
+export async function handleMicropub(
+  request: Request,
+  env: Env,
+  waitUntil?: (promise: Promise<unknown>) => void
+): Promise<Response> {
   try {
     const tokenInfo = await verifyToken(request, env);
 
@@ -48,15 +54,50 @@ export async function handleMicropub(request: Request, env: Env): Promise<Respon
       // Create — route by post type discovery
       requireScope(tokenInfo, "create");
 
+      let response: Response;
+      let syndicationContent: SyndicationContent | null = null;
+
       if (micropubReq.properties["bookmark-of"]?.[0]) {
-        return createBookmark(micropubReq, env);
+        response = await createBookmark(micropubReq, env);
+        if (response.status === 201) {
+          syndicationContent = {
+            body: micropubReq.properties.content?.[0] || "",
+            url: response.headers.get("Location")!,
+            contentType: "bookmark",
+            title: micropubReq.properties.name?.[0] || micropubReq.properties["bookmark-of"][0],
+            bookmarkUrl: micropubReq.properties["bookmark-of"][0],
+          };
+        }
+      } else if (micropubReq.properties.name?.[0]) {
+        response = await createPost(micropubReq, env);
+        if (response.status === 201) {
+          syndicationContent = {
+            body: micropubReq.properties.content?.[0] || "",
+            url: response.headers.get("Location")!,
+            contentType: "post",
+            title: micropubReq.properties.name[0],
+          };
+        }
+      } else {
+        response = await createNote(micropubReq, env);
+        if (response.status === 201) {
+          syndicationContent = {
+            body: micropubReq.properties.content?.[0] || "",
+            url: response.headers.get("Location")!,
+            contentType: "note",
+          };
+        }
       }
 
-      if (micropubReq.properties.name?.[0]) {
-        return createPost(micropubReq, env);
+      // Syndicate in background if targets were requested
+      if (syndicationContent && micropubReq.syndicateTo.length > 0 && waitUntil) {
+        const resolved = resolveUrl(syndicationContent.url, env.SITE_URL);
+        waitUntil(
+          syndicate(syndicationContent, micropubReq.syndicateTo, resolved.filePath, env)
+        );
       }
 
-      return createNote(micropubReq, env);
+      return response;
     }
 
     if (request.method === "OPTIONS") {

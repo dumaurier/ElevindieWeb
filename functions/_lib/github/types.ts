@@ -27,4 +27,12 @@ export interface Env {
   SITE_URL: string;
   TOKEN_ENDPOINT: string;
   ME: string;
+  // Syndication — optional, feature activates when tokens are present
+  BLUESKY_HANDLE?: string;
+  BLUESKY_APP_PASSWORD?: string;
+  BLUESKY_PDS_URL?: string;
+  MASTODON_INSTANCE_URL?: string;
+  MASTODON_ACCESS_TOKEN?: string;
+  // Webhook — optional, for syndication via direct git commits
+  GITHUB_WEBHOOK_SECRET?: string;
 }

@@ -4,6 +4,7 @@ import { parse } from "../utils/frontmatter.js";
 import { postToMicropub, noteToMicropub, bookmarkToMicropub } from "../mapping/fm-to-micropub.js";
 import { json } from "../utils/response.js";
 import { invalidRequest } from "../utils/errors.js";
+import { getAvailableTargets } from "../syndication/syndicate.js";
 
 export async function handleQuery(
   request: Request,
@@ -20,12 +21,12 @@ export async function handleQuery(
     case "config":
       return json({
         "media-endpoint": null,
-        "syndicate-to": [],
+        "syndicate-to": getAvailableTargets(env),
         q: ["config", "source", "syndicate-to"],
       });
 
     case "syndicate-to":
-      return json({ "syndicate-to": [] });
+      return json({ "syndicate-to": getAvailableTargets(env) });
 
     case "source":
       return handleSourceQuery(url, env);

@@ -14,7 +14,15 @@ GITHUB_REPO_NAME = "ElevindieWeb"
 GITHUB_BRANCH = "main"
 TOKEN_ENDPOINT = "https://tokens.indieauth.com/token"
 
+# Syndication — uncomment and fill in to enable POSSE
+BLUESKY_HANDLE = "@joshvogt.bsky.social"
+# BLUESKY_PDS_URL = "https://bsky.social"
+MASTODON_INSTANCE_URL = "https://mastodon.social"
+
 # Secrets — set via Cloudflare dashboard (Settings > Variables and Secrets)
 # These cannot go in wrangler.toml because they are sensitive:
-#   GITHUB_TOKEN        — GitHub personal access token with repo scope
-#   WEBMENTION_IO_TOKEN — webmention.io API token (optional, for build-time fetching)
+#   GITHUB_TOKEN           — GitHub personal access token with repo scope
+#   WEBMENTION_IO_TOKEN    — webmention.io API token (optional, for build-time fetching)
+#   BLUESKY_APP_PASSWORD   — Bluesky app password (Settings > Advanced > App Passwords)
+#   MASTODON_ACCESS_TOKEN  — Mastodon access token (Settings > Development > New Application)
+#   GITHUB_WEBHOOK_SECRET  — shared secret for GitHub push webhook (repo Settings > Webhooks)

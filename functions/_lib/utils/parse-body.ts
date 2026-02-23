@@ -8,6 +8,7 @@ export interface MicropubRequest {
   replace?: Record<string, string[]>;
   add?: Record<string, string[]>;
   delete?: Record<string, string[]> | string[];
+  syndicateTo: string[];
 }
 
 export async function parseBody(request: Request): Promise<MicropubRequest> {
@@ -33,6 +34,8 @@ async function parseJsonBody(request: Request): Promise<MicropubRequest> {
     throw invalidRequest("Invalid JSON body");
   }
 
+  const syndicateTo = extractSyndicateTo(body.properties?.["mp-syndicate-to"] || body["mp-syndicate-to"]);
+
   if (body.action) {
     return {
       action: body.action,
@@ -42,6 +45,7 @@ async function parseJsonBody(request: Request): Promise<MicropubRequest> {
       replace: body.replace,
       add: body.add,
       delete: body.delete,
+      syndicateTo,
     };
   }
 
@@ -50,11 +54,12 @@ async function parseJsonBody(request: Request): Promise<MicropubRequest> {
 
   if (body.properties) {
     for (const [key, value] of Object.entries(body.properties)) {
+      if (key === "mp-syndicate-to") continue;
       properties[key] = Array.isArray(value) ? value : [value as string];
     }
   }
 
-  return { type, properties };
+  return { type, properties, syndicateTo };
 }
 
 async function parseFormBody(request: Request): Promise<MicropubRequest> {
@@ -66,10 +71,17 @@ async function parseFormBody(request: Request): Promise<MicropubRequest> {
   const type = `h-${h}`;
   const url = params.get("url") || undefined;
 
+  const syndicateToValues: string[] = [];
   const properties: Record<string, string[]> = {};
 
   for (const [key, value] of params.entries()) {
     if (["h", "action", "url", "access_token"].includes(key)) continue;
+
+    // Capture mp-syndicate-to before skipping other mp- params
+    if (key === "mp-syndicate-to" || key === "mp-syndicate-to[]") {
+      syndicateToValues.push(value);
+      continue;
+    }
     if (key.startsWith("mp-")) continue;
 
     const cleanKey = key.replace(/\[\]$/, "");
@@ -85,5 +97,12 @@ async function parseFormBody(request: Request): Promise<MicropubRequest> {
     type,
     url,
     properties,
+    syndicateTo: syndicateToValues,
   };
+}
+
+function extractSyndicateTo(value: unknown): string[] {
+  if (!value) return [];
+  if (Array.isArray(value)) return value.map(String);
+  return [String(value)];
 }

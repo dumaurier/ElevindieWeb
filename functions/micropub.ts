@@ -2,7 +2,7 @@ import { handleMicropub } from "./_lib/handler.js";
 import type { Env } from "./_lib/github/types.js";
 
 export const onRequestPost: PagesFunction<Env> = async (context) => {
-  return handleMicropub(context.request, context.env);
+  return handleMicropub(context.request, context.env, context.waitUntil.bind(context));
 };
 
 export const onRequestGet: PagesFunction<Env> = async (context) => {
