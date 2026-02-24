@@ -6,5 +6,8 @@ tags:
   - indieweb
   - micropub
   - indieauth
+syndicatedTo:
+  - https://bsky.app/profile/joshvogt.bsky.social/post/3mfn4tskjqq2u
+  - https://mastodon.social/@joshvogt/116127765571536997
 ---
 Testing again. and again. and again.
