@@ -4,13 +4,16 @@
 {% if bookmarkOf %}
   <p><a class="u-bookmark-of" href="{{ bookmarkOf }}">{{ bookmarkOf }}</a></p>
 {% endif %}
+{% if inReplyTo %}
+  <p>In reply to <a class="u-in-reply-to" href="{{ inReplyTo }}">{{ inReplyTo }}</a></p>
+{% endif %}
 {% if summary %}
   <p class="p-summary">{{ summary }}</p>
 {% endif %}
 {% if tags %}
   <ul role="list">
     {% for tag in tags %}
-      {% if tag !== 'posts' and tag !== 'notes' and tag !== 'bookmarks' %}
+      {% if tag !== 'posts' and tag !== 'notes' and tag !== 'bookmarks' and tag !== 'replies' %}
         <li><a class="p-category" href="/tags/{{ tag | slugify }}/">{{ tag }}</a></li>
       {% endif %}
     {% endfor %}

@@ -1,0 +1,34 @@
+---
+layout: false
+permalink: /replies/feed.xml
+eleventyExcludeFromCollections: true
+---
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>{{ meta.siteName }} — Replies</title>
+  <subtitle>Replies from {{ meta.siteName }}</subtitle>
+  <link href="{{ meta.url }}/replies/feed.xml" rel="self" type="application/atom+xml"/>
+  <link href="{{ meta.url }}/replies/" rel="alternate" type="text/html"/>
+  <updated>{{ collections.allReplies | getNewestCollectionItemDate | dateToRfc3339 }}</updated>
+  <id>{{ meta.url }}/replies/</id>
+  <author>
+    <name>{{ meta.author.name }}</name>
+    <email>{{ meta.author.email }}</email>
+  </author>
+  {%- for reply in collections.allReplies | head(20) %}
+  <entry>
+    {%- if reply.data.title %}
+    <title>{{ reply.data.title }}</title>
+    {%- else %}
+    <title>{{ reply.templateContent | striptags | truncate(80, false, '…') }}</title>
+    {%- endif %}
+    <link href="{{ reply.url | absoluteUrl(meta.url) }}" rel="alternate" type="text/html"/>
+    <id>{{ reply.url | absoluteUrl(meta.url) }}</id>
+    <updated>{{ reply.date | dateToRfc3339 }}</updated>
+    {%- if reply.data.inReplyTo %}
+    <link href="{{ reply.data.inReplyTo }}" rel="related"/>
+    {%- endif %}
+    <content type="html">{{ reply.templateContent | htmlToAbsoluteUrls(reply.url | absoluteUrl(meta.url)) }}</content>
+  </entry>
+  {%- endfor %}
+</feed>

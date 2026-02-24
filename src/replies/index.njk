@@ -1,0 +1,10 @@
+---
+layout: base
+title: Replies
+permalink: /replies/
+description: Replies to other posts and conversations.
+---
+<h1>{{ title }}</h1>
+{% set feedItems = collections.allReplies %}
+{% set feedTitle = 'Replies' %}
+{% include "partials/h-feed.njk" %}

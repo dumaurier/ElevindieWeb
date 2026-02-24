@@ -1,6 +1,6 @@
 import { invalidRequest } from "../utils/errors.js";
 
-export type ContentType = "post" | "note" | "bookmark";
+export type ContentType = "post" | "note" | "bookmark" | "reply";
 
 export interface ResolvedPath {
   contentType: ContentType;
@@ -31,6 +31,11 @@ export function resolveUrl(url: string, siteUrl: string): ResolvedPath {
   if (path.startsWith("bookmarks/")) {
     const slug = path.replace("bookmarks/", "");
     return { contentType: "bookmark", filePath: `src/bookmarks/${slug}.md`, slug };
+  }
+
+  if (path.startsWith("replies/")) {
+    const slug = path.replace("replies/", "");
+    return { contentType: "reply", filePath: `src/replies/${slug}.md`, slug };
   }
 
   throw invalidRequest(`Cannot resolve URL to content type: ${url}`);

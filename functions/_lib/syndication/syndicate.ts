@@ -7,9 +7,10 @@ import { syndicateToMastodon } from "./mastodon.js";
 export interface SyndicationContent {
   body: string;
   url: string;
-  contentType: "post" | "note" | "bookmark";
+  contentType: "post" | "note" | "bookmark" | "reply";
   title?: string;
   bookmarkUrl?: string;
+  replyToUrl?: string;
 }
 
 export interface SyndicateTarget {
@@ -50,6 +51,8 @@ function formatText(content: SyndicationContent): string {
       return `${content.body}\n\n${content.url}`;
     case "bookmark":
       return `Bookmarked: ${content.title}\n${content.bookmarkUrl}\n\n${content.url}`;
+    case "reply":
+      return `Re: ${content.replyToUrl}\n\n${content.body}\n\n${content.url}`;
   }
 }
 

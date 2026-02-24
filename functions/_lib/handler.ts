@@ -4,6 +4,7 @@ import { parseBody } from "./utils/parse-body.js";
 import { createPost, updatePost, deletePost } from "./handlers/posts.js";
 import { createNote, updateNote, deleteNote } from "./handlers/notes.js";
 import { createBookmark, updateBookmark, deleteBookmark } from "./handlers/bookmarks.js";
+import { createReply, updateReply, deleteReply } from "./handlers/replies.js";
 import { handleQuery } from "./handlers/query.js";
 import { resolveUrl } from "./mapping/url-to-path.js";
 import { syndicate } from "./syndication/syndicate.js";
@@ -35,6 +36,7 @@ export async function handleMicropub(
           case "post": return deletePost(resolved.filePath, env);
           case "note": return deleteNote(resolved.filePath, env);
           case "bookmark": return deleteBookmark(resolved.filePath, env);
+          case "reply": return deleteReply(resolved.filePath, env);
         }
       }
 
@@ -48,6 +50,7 @@ export async function handleMicropub(
           case "post": return updatePost(resolved.filePath, resolved.slug, micropubReq, env);
           case "note": return updateNote(resolved.filePath, resolved.slug, micropubReq, env);
           case "bookmark": return updateBookmark(resolved.filePath, resolved.slug, micropubReq, env);
+          case "reply": return updateReply(resolved.filePath, resolved.slug, micropubReq, env);
         }
       }
 
@@ -57,7 +60,18 @@ export async function handleMicropub(
       let response: Response;
       let syndicationContent: SyndicationContent | null = null;
 
-      if (micropubReq.properties["bookmark-of"]?.[0]) {
+      if (micropubReq.properties["in-reply-to"]?.[0]) {
+        response = await createReply(micropubReq, env);
+        if (response.status === 201) {
+          syndicationContent = {
+            body: micropubReq.properties.content?.[0] || "",
+            url: response.headers.get("Location")!,
+            contentType: "reply",
+            title: micropubReq.properties.name?.[0],
+            replyToUrl: micropubReq.properties["in-reply-to"][0],
+          };
+        }
+      } else if (micropubReq.properties["bookmark-of"]?.[0]) {
         response = await createBookmark(micropubReq, env);
         if (response.status === 201) {
           syndicationContent = {

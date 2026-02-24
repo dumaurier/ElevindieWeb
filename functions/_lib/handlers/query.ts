@@ -1,7 +1,7 @@
 import { GitHubClient } from "../github/client.js";
 import type { Env } from "../github/types.js";
 import { parse } from "../utils/frontmatter.js";
-import { postToMicropub, noteToMicropub, bookmarkToMicropub } from "../mapping/fm-to-micropub.js";
+import { postToMicropub, noteToMicropub, bookmarkToMicropub, replyToMicropub } from "../mapping/fm-to-micropub.js";
 import { json } from "../utils/response.js";
 import { invalidRequest } from "../utils/errors.js";
 import { getAvailableTargets } from "../syndication/syndicate.js";
@@ -78,6 +78,17 @@ async function handleSourceQuery(url: URL, env: Env): Promise<Response> {
     }
     const { data, body } = parse(file.content);
     return json(bookmarkToMicropub(data, body));
+  }
+
+  if (path.startsWith("replies/")) {
+    const slug = path.replace("replies/", "");
+    const filePath = `src/replies/${slug}.md`;
+    const file = await github.getFile(filePath);
+    if (!file) {
+      throw invalidRequest("Reply not found");
+    }
+    const { data, body } = parse(file.content);
+    return json(replyToMicropub(data, body));
   }
 
   throw invalidRequest("Unsupported content URL");

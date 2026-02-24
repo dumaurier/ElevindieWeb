@@ -15,12 +15,13 @@ interface PushEvent {
   }>;
 }
 
-type ContentType = "post" | "note" | "bookmark";
+type ContentType = "post" | "note" | "bookmark" | "reply";
 
 const CONTENT_DIRS: Record<string, ContentType> = {
   "src/posts/": "post",
   "src/notes/": "note",
   "src/bookmarks/": "bookmark",
+  "src/replies/": "reply",
 };
 
 /**
@@ -153,6 +154,7 @@ async function processNewFiles(files: Set<string>, env: Env): Promise<void> {
         contentType,
         title: data.title as string | undefined,
         bookmarkUrl: data.bookmarkOf as string | undefined,
+        replyToUrl: data.inReplyTo as string | undefined,
       };
 
       await syndicate(content, allTargetUids, filePath, env);

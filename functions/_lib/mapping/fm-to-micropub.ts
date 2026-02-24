@@ -51,3 +51,22 @@ export function bookmarkToMicropub(
 
   return { type: ["h-entry"], properties };
 }
+
+export function replyToMicropub(
+  data: Record<string, unknown>,
+  body: string
+): { type: string[]; properties: Record<string, string[]> } {
+  const properties: Record<string, string[]> = {};
+
+  if (data.title) properties.name = [String(data.title)];
+  if (data.inReplyTo) properties["in-reply-to"] = [String(data.inReplyTo)];
+  if (data.date) properties.published = [String(data.date)];
+  if (body) properties.content = [body];
+
+  if (Array.isArray(data.tags)) {
+    const userTags = data.tags.filter((t: unknown) => t !== "replies").map(String);
+    if (userTags.length) properties.category = userTags;
+  }
+
+  return { type: ["h-entry"], properties };
+}
