@@ -35,4 +35,8 @@ export interface Env {
   MASTODON_ACCESS_TOKEN?: string;
   // Webhook — optional, for syndication via direct git commits
   GITHUB_WEBHOOK_SECRET?: string;
+  // IndieAuth — required for self-hosted auth, optional for external (indieauth.com)
+  AUTH_PASSWORD?: string;
+  JWT_SECRET?: string;
+  INDIEAUTH_KV?: KVNamespace;
 }

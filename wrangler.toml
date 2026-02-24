@@ -12,12 +12,19 @@ ME = "https://elevindieweb.pages.dev/"
 GITHUB_REPO_OWNER = "dumaurier"
 GITHUB_REPO_NAME = "ElevindieWeb"
 GITHUB_BRANCH = "main"
-TOKEN_ENDPOINT = "https://tokens.indieauth.com/token"
+TOKEN_ENDPOINT = "https://elevindieweb.pages.dev/token"
 
 # Syndication — uncomment and fill in to enable POSSE
 BLUESKY_HANDLE = "joshvogt.bsky.social"
 # BLUESKY_PDS_URL = "https://bsky.social"
 MASTODON_INSTANCE_URL = "https://mastodon.social"
+
+# IndieAuth KV namespace — stores authorization codes and token revocations
+# Create with: npx wrangler kv namespace create INDIEAUTH_KV
+# Then paste the id below
+[[kv_namespaces]]
+binding = "INDIEAUTH_KV"
+id = "f5ecc27bc8204599958fd634e8dac078"
 
 # Secrets — set via Cloudflare dashboard (Settings > Variables and Secrets)
 # These cannot go in wrangler.toml because they are sensitive:
@@ -26,3 +33,5 @@ MASTODON_INSTANCE_URL = "https://mastodon.social"
 #   BLUESKY_APP_PASSWORD   — Bluesky app password (Settings > Advanced > App Passwords)
 #   MASTODON_ACCESS_TOKEN  — Mastodon access token (Settings > Development > New Application)
 #   GITHUB_WEBHOOK_SECRET  — shared secret for GitHub push webhook (repo Settings > Webhooks)
+#   AUTH_PASSWORD           — password for IndieAuth login (choose a strong password)
+#   JWT_SECRET             — random string for JWT signing (generate: openssl rand -hex 32)

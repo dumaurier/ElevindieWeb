@@ -25,10 +25,11 @@ module.exports = {
       { name: 'BlueSky', url: 'https://bsky.app/profile/joshuavogt.bsky.social'}
     ]
   },
-  // IndieAuth endpoints — default to indieauth.com, swap if self-hosting
+  // IndieAuth endpoints — self-hosted
   indieAuth: {
-    authorizationEndpoint: 'https://indieauth.com/auth',
-    tokenEndpoint: 'https://tokens.indieauth.com/token'
+    metadataEndpoint: '/indieauth-metadata',
+    authorizationEndpoint: '/auth',
+    tokenEndpoint: '/token'
   },
   // Webmention — set WEBMENTION_IO_TOKEN env var for build-time fetching
   webmention: {
