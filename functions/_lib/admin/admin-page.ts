@@ -1,10 +1,10 @@
 /**
  * Render the admin publishing page.
  *
- * Self-contained HTML with inline CSS and JS.
+ * Links to the site stylesheet for layout, typography, colors, and buttons.
+ * Inline styles only for admin-specific components (toolbar, form fields, status).
  * Client-side PKCE auth flow against own IndieAuth endpoints.
  * Publishes via own Micropub endpoint.
- * Semantic, WCAG 2.2 AAA compliant.
  */
 export function renderAdminPage(params: { siteUrl: string }): string {
   return `<!DOCTYPE html>
@@ -14,169 +14,62 @@ export function renderAdminPage(params: { siteUrl: string }): string {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin</title>
   <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="/assets/css/style.css">
   <style>
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-    }
-
-    :root {
-      --color-bg: #8bbae7;
-      --color-fg: #240a37;
-      --color-accent: #e7e68b;
-      --color-border: #e78b8c;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --color-bg: #240a37;
-        --color-fg: #8bbae7;
-      }
-    }
-
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      background-color: var(--color-bg);
-      color: var(--color-fg);
-      line-height: 1.6;
-      min-height: 100vh;
-      padding: 1.5rem;
-    }
-
-    main {
-      width: 100%;
-      max-width: 42rem;
-      margin-inline: auto;
-    }
-
-    h1 {
-      font-size: 1.75rem;
-    }
-
-    a {
-      color: var(--color-fg);
-    }
-
-    :focus-visible {
-      outline: 3px solid var(--color-accent);
-      outline-offset: 2px;
-    }
-
-    :focus:not(:focus-visible) {
-      outline: none;
-    }
-
-    /* Login state */
-    #login {
-      min-height: calc(100vh - 3rem);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+    /* Admin-specific: centered page state */
+    .admin-center {
+      min-height: 80vh;
+      display: grid;
+      place-items: center;
       text-align: center;
     }
 
-    #login p {
-      margin-block: 0.5rem 1.5rem;
-    }
-
-    /* Loading state */
-    #loading {
-      min-height: calc(100vh - 3rem);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* Editor header */
-    .editor-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-block-end: 1.5rem;
-    }
-
-    /* Type selector */
+    /* Admin-specific: type selector */
     .type-selector {
       border: none;
       padding: 0;
-      margin-block-end: 1.5rem;
     }
 
     .type-selector legend {
       font-weight: 700;
-      margin-block-end: 0.5rem;
       padding: 0;
     }
 
-    .type-options {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem 1rem;
-    }
-
-    .type-options label {
-      display: flex;
-      align-items: center;
-      gap: 0.375rem;
-      cursor: pointer;
-    }
-
-    .type-options input[type="radio"] {
-      width: 1.25rem;
-      height: 1.25rem;
-      accent-color: var(--color-fg);
-    }
-
-    /* Form fields */
-    .field {
-      margin-block-end: 1.5rem;
-    }
-
-    .field label {
+    /* Admin-specific: form fields */
+    .admin-field label {
       display: block;
       font-weight: 700;
-      margin-block-end: 0.25rem;
+      margin-block-end: var(--space-3xs);
     }
 
-    .field input,
-    .field textarea {
+    .admin-field input,
+    .admin-field textarea {
       width: 100%;
-      padding: 0.625rem 0.75rem;
-      font-size: 1rem;
-      font-family: inherit;
+      padding: var(--space-2xs) var(--space-xs);
       background-color: var(--color-bg);
       color: var(--color-fg);
       border: 2px solid var(--color-fg);
-      border-radius: 0.25rem;
+      border-radius: 3px;
     }
 
-    .field textarea {
-      font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace;
+    .admin-field textarea {
+      font-family: var(--font-mono);
       resize: vertical;
-      line-height: 1.5;
     }
 
-    /* Markdown toolbar */
+    /* Admin-specific: markdown toolbar */
     .toolbar {
       display: flex;
-      gap: 0.25rem;
-      margin-block-end: 0.25rem;
+      gap: var(--space-3xs);
+      margin-block-end: var(--space-3xs);
     }
 
     .toolbar button {
-      padding: 0.25rem 0.625rem;
-      min-height: 2.25rem;
-      font-size: 0.875rem;
-      font-weight: 700;
-      font-family: inherit;
+      padding: var(--space-3xs) var(--space-2xs);
+      font-size: var(--size-step--1);
       background-color: transparent;
       color: var(--color-fg);
       border: 1px solid var(--color-fg);
-      border-radius: 0.25rem;
-      cursor: pointer;
     }
 
     .toolbar button:hover {
@@ -184,163 +77,134 @@ export function renderAdminPage(params: { siteUrl: string }): string {
       color: var(--color-bg);
     }
 
-    /* Syndication fieldset */
-    #syndication {
+    /* Admin-specific: syndication fieldset */
+    .syndication-targets {
       border: 2px solid var(--color-fg);
-      border-radius: 0.25rem;
-      padding: 1rem;
-      margin-block-end: 1.5rem;
+      border-radius: 3px;
+      padding: var(--space-s);
     }
 
-    #syndication legend {
+    .syndication-targets legend {
       font-weight: 700;
-      padding-inline: 0.5rem;
+      padding-inline: var(--space-2xs);
     }
 
-    #syndication label {
+    .syndication-targets label {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      padding-block: 0.25rem;
+      gap: var(--space-2xs);
+      padding-block: var(--space-3xs);
       cursor: pointer;
     }
 
-    #syndication input[type="checkbox"] {
+    .syndication-targets input[type="checkbox"] {
       width: 1.25rem;
       height: 1.25rem;
       accent-color: var(--color-fg);
     }
 
-    /* Buttons */
-    button[type="submit"],
-    .action-btn {
-      font-family: inherit;
-      font-size: 1rem;
-      font-weight: 700;
-      padding: 0.75rem 1.5rem;
-      min-height: 2.75rem;
+    /* Admin-specific: status messages */
+    .admin-status {
+      padding: var(--space-s);
       border: 2px solid var(--color-fg);
-      border-radius: 0.25rem;
-      cursor: pointer;
-      background-color: var(--color-fg);
-      color: var(--color-bg);
+      border-radius: 3px;
     }
 
-    button[type="submit"]:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
+    .admin-status.success {
+      background-color: var(--color-accent);
+      color: #240a37;
     }
 
-    .link-btn {
+    .admin-status.success a { color: #240a37; }
+
+    .admin-status.error {
+      background-color: var(--color-border);
+      color: #240a37;
+    }
+
+    /* Admin-specific: sign-out link */
+    .sign-out {
       background: none;
       border: none;
       color: var(--color-fg);
       text-decoration: underline;
       cursor: pointer;
-      font-family: inherit;
-      font-size: 0.875rem;
-      padding: 0.25rem;
-    }
-
-    /* Status messages */
-    .status {
-      padding: 1rem;
-      border: 2px solid var(--color-fg);
-      border-radius: 0.25rem;
-      margin-block-end: 1.5rem;
-    }
-
-    .status.success {
-      background-color: var(--color-accent);
-      color: #240a37;
-    }
-
-    .status.error {
-      background-color: var(--color-border);
-      color: #240a37;
-    }
-
-    .status p {
-      margin-block-end: 0.5rem;
-    }
-
-    .status p:last-of-type {
-      margin-block-end: 1rem;
-    }
-
-    .status a {
-      color: #240a37;
+      font-size: var(--size-step--1);
     }
   </style>
 </head>
-<body>
+<body class="admin">
   <main>
-    <section id="login" hidden>
-      <h1>Admin</h1>
-      <p>Sign in to publish to your site.</p>
-      <div id="login-error" role="alert" hidden></div>
-      <button type="button" class="action-btn" id="sign-in-btn">Sign In</button>
+    <section data-section="login" hidden>
+      <div class="admin-center">
+        <div class="flow">
+          <h1>Admin</h1>
+          <p>Sign in to publish to your site.</p>
+          <div data-role="login-error" role="alert" hidden></div>
+          <button type="button" data-action="sign-in">Sign In</button>
+        </div>
+      </div>
     </section>
 
-    <section id="loading" hidden>
-      <p>Signing in&hellip;</p>
+    <section data-section="loading" hidden>
+      <div class="admin-center">
+        <p>Signing in&hellip;</p>
+      </div>
     </section>
 
-    <section id="editor" hidden>
-      <header class="editor-header">
+    <section data-section="editor" hidden>
+      <div class="repel">
         <h1>New Entry</h1>
-        <button type="button" class="link-btn" id="sign-out-btn">Sign out</button>
-      </header>
+        <button type="button" class="sign-out" data-action="sign-out">Sign out</button>
+      </div>
 
-      <form id="entry-form" novalidate>
-        <fieldset class="type-selector">
+      <form data-role="entry-form" class="flow" novalidate>
+        <fieldset class="type-selector cluster">
           <legend>Type</legend>
-          <div class="type-options">
-            <label><input type="radio" name="type" value="note" checked> Note</label>
-            <label><input type="radio" name="type" value="post"> Post</label>
-            <label><input type="radio" name="type" value="bookmark"> Bookmark</label>
-            <label><input type="radio" name="type" value="reply"> Reply</label>
-          </div>
+          <label><input type="radio" name="type" value="note" checked> Note</label>
+          <label><input type="radio" name="type" value="post"> Post</label>
+          <label><input type="radio" name="type" value="bookmark"> Bookmark</label>
+          <label><input type="radio" name="type" value="reply"> Reply</label>
         </fieldset>
 
-        <div class="field" id="title-field" hidden>
+        <div class="admin-field" data-field="title" hidden>
           <label for="title">Title</label>
-          <input type="text" id="title" name="title">
+          <input type="text" id="title">
         </div>
 
-        <div class="field" id="bookmark-url-field" hidden>
+        <div class="admin-field" data-field="bookmark-url" hidden>
           <label for="bookmark-url">Bookmark URL</label>
-          <input type="url" id="bookmark-url" name="bookmark-url" placeholder="https://...">
+          <input type="url" id="bookmark-url" placeholder="https://...">
         </div>
 
-        <div class="field" id="reply-to-field" hidden>
+        <div class="admin-field" data-field="reply-to" hidden>
           <label for="reply-to">Reply to URL</label>
-          <input type="url" id="reply-to" name="reply-to" placeholder="https://...">
+          <input type="url" id="reply-to" placeholder="https://...">
         </div>
 
-        <div class="field" id="content-field">
+        <div class="admin-field">
           <label for="content">Content</label>
           <div class="toolbar" role="toolbar" aria-label="Markdown formatting">
-            <button type="button" data-action="bold" title="Bold (Ctrl+B)" aria-label="Bold"><strong>B</strong></button>
-            <button type="button" data-action="italic" title="Italic (Ctrl+I)" aria-label="Italic"><em>I</em></button>
-            <button type="button" data-action="link" title="Link (Ctrl+K)" aria-label="Insert link">Link</button>
-            <button type="button" data-action="heading" title="Heading" aria-label="Insert heading">H2</button>
+            <button type="button" data-md="bold" title="Bold (Ctrl+B)" aria-label="Bold"><strong>B</strong></button>
+            <button type="button" data-md="italic" title="Italic (Ctrl+I)" aria-label="Italic"><em>I</em></button>
+            <button type="button" data-md="link" title="Link (Ctrl+K)" aria-label="Insert link">Link</button>
+            <button type="button" data-md="heading" title="Heading" aria-label="Insert heading">H2</button>
           </div>
-          <textarea id="content" name="content" rows="12"></textarea>
+          <textarea id="content" rows="12"></textarea>
         </div>
 
-        <div class="field">
+        <div class="admin-field">
           <label for="tags">Tags</label>
-          <input type="text" id="tags" name="tags" placeholder="comma, separated">
+          <input type="text" id="tags" placeholder="comma, separated">
         </div>
 
-        <fieldset id="syndication" hidden>
+        <fieldset class="syndication-targets" data-role="syndication" hidden>
           <legend>Syndicate to</legend>
         </fieldset>
 
-        <div id="status" role="status" aria-live="polite" hidden></div>
+        <div data-role="status" role="status" aria-live="polite" hidden></div>
 
-        <button type="submit" id="publish-btn">Publish Note</button>
+        <button type="submit" data-role="publish">Publish Note</button>
       </form>
     </section>
   </main>
@@ -348,6 +212,9 @@ export function renderAdminPage(params: { siteUrl: string }): string {
   <script>
     (function () {
       var SITE_URL = "${escapeJs(params.siteUrl)}";
+
+      var $ = function (sel) { return document.querySelector(sel); };
+      var $$ = function (sel) { return document.querySelectorAll(sel); };
 
       // --- PKCE helpers ---
 
@@ -374,18 +241,18 @@ export function renderAdminPage(params: { siteUrl: string }): string {
 
       // --- State management ---
 
-      function showSection(id) {
-        ["login", "loading", "editor"].forEach(function (s) {
-          document.getElementById(s).hidden = s !== id;
+      function showSection(name) {
+        $$("[data-section]").forEach(function (el) {
+          el.hidden = el.dataset.section !== name;
         });
       }
 
       function showLogin(error) {
         showSection("login");
-        var errEl = document.getElementById("login-error");
+        var errEl = $("[data-role=login-error]");
         if (error) {
           errEl.hidden = false;
-          errEl.className = "status error";
+          errEl.className = "admin-status error";
           errEl.textContent = error;
         } else {
           errEl.hidden = true;
@@ -494,7 +361,7 @@ export function renderAdminPage(params: { siteUrl: string }): string {
             var targets = data["syndicate-to"] || [];
             if (targets.length === 0) return;
 
-            var fieldset = document.getElementById("syndication");
+            var fieldset = $("[data-role=syndication]");
             fieldset.hidden = false;
 
             targets.forEach(function (target) {
@@ -514,36 +381,27 @@ export function renderAdminPage(params: { siteUrl: string }): string {
       // --- Post type switching ---
 
       function updateFields() {
-        var type = document.querySelector('input[name="type"]:checked').value;
+        var type = $('input[name="type"]:checked').value;
+        var publish = $("[data-role=publish]");
 
-        var titleField = document.getElementById("title-field");
-        var bookmarkField = document.getElementById("bookmark-url-field");
-        var replyField = document.getElementById("reply-to-field");
-        var titleInput = document.getElementById("title");
-        var bookmarkInput = document.getElementById("bookmark-url");
-        var replyInput = document.getElementById("reply-to");
-        var publishBtn = document.getElementById("publish-btn");
-
-        titleField.hidden = true;
-        bookmarkField.hidden = true;
-        replyField.hidden = true;
+        $$("[data-field]").forEach(function (el) { el.hidden = true; });
 
         switch (type) {
           case "note":
-            publishBtn.textContent = "Publish Note";
+            publish.textContent = "Publish Note";
             break;
           case "post":
-            titleField.hidden = false;
-            publishBtn.textContent = "Publish Post";
+            $("[data-field=title]").hidden = false;
+            publish.textContent = "Publish Post";
             break;
           case "bookmark":
-            titleField.hidden = false;
-            bookmarkField.hidden = false;
-            publishBtn.textContent = "Publish Bookmark";
+            $("[data-field=title]").hidden = false;
+            $("[data-field=bookmark-url]").hidden = false;
+            publish.textContent = "Publish Bookmark";
             break;
           case "reply":
-            replyField.hidden = false;
-            publishBtn.textContent = "Publish Reply";
+            $("[data-field=reply-to]").hidden = false;
+            publish.textContent = "Publish Reply";
             break;
         }
       }
@@ -551,7 +409,7 @@ export function renderAdminPage(params: { siteUrl: string }): string {
       // --- Markdown toolbar ---
 
       function insertMarkdown(action) {
-        var textarea = document.getElementById("content");
+        var textarea = $("#content");
         var start = textarea.selectionStart;
         var end = textarea.selectionEnd;
         var selected = textarea.value.substring(start, end);
@@ -583,10 +441,10 @@ export function renderAdminPage(params: { siteUrl: string }): string {
       // --- Form validation ---
 
       function validateForm(type) {
-        var content = document.getElementById("content").value.trim();
-        var title = document.getElementById("title").value.trim();
-        var bookmarkUrl = document.getElementById("bookmark-url").value.trim();
-        var replyTo = document.getElementById("reply-to").value.trim();
+        var content = $("#content").value.trim();
+        var title = $("#title").value.trim();
+        var bookmarkUrl = $("#bookmark-url").value.trim();
+        var replyTo = $("#reply-to").value.trim();
 
         switch (type) {
           case "note":
@@ -613,37 +471,37 @@ export function renderAdminPage(params: { siteUrl: string }): string {
       function publishEntry(e) {
         e.preventDefault();
 
-        var type = document.querySelector('input[name="type"]:checked').value;
+        var type = $('input[name="type"]:checked').value;
         var error = validateForm(type);
         if (error) {
           showStatus(error, "error");
           return;
         }
 
-        var publishBtn = document.getElementById("publish-btn");
-        publishBtn.disabled = true;
-        publishBtn.textContent = "Publishing\\u2026";
+        var publish = $("[data-role=publish]");
+        publish.disabled = true;
+        publish.textContent = "Publishing\\u2026";
 
         var properties = {};
-        var content = document.getElementById("content").value.trim();
+        var content = $("#content").value.trim();
         if (content) properties.content = [content];
 
-        var title = document.getElementById("title").value.trim();
+        var title = $("#title").value.trim();
         if (title && (type === "post" || type === "bookmark")) {
           properties.name = [title];
         }
 
-        var bookmarkUrl = document.getElementById("bookmark-url").value.trim();
+        var bookmarkUrl = $("#bookmark-url").value.trim();
         if (bookmarkUrl && type === "bookmark") {
           properties["bookmark-of"] = [bookmarkUrl];
         }
 
-        var replyTo = document.getElementById("reply-to").value.trim();
+        var replyTo = $("#reply-to").value.trim();
         if (replyTo && type === "reply") {
           properties["in-reply-to"] = [replyTo];
         }
 
-        var tags = document.getElementById("tags").value.trim();
+        var tags = $("#tags").value.trim();
         if (tags) {
           properties.category = tags
             .split(",")
@@ -652,8 +510,7 @@ export function renderAdminPage(params: { siteUrl: string }): string {
         }
 
         var syndicateTo = [];
-        document
-          .querySelectorAll('#syndication input[type="checkbox"]:checked')
+        $$('.syndication-targets input[type="checkbox"]:checked')
           .forEach(function (cb) {
             syndicateTo.push(cb.value);
           });
@@ -681,7 +538,7 @@ export function renderAdminPage(params: { siteUrl: string }): string {
             } else {
               return res.json().then(function (data) {
                 showStatus(data.error_description || "Publish failed.", "error");
-                publishBtn.disabled = false;
+                publish.disabled = false;
                 updateFields();
               });
             }
@@ -689,7 +546,7 @@ export function renderAdminPage(params: { siteUrl: string }): string {
           .catch(function (err) {
             if (err.message !== "unauthorized") {
               showStatus("Network error. Please try again.", "error");
-              publishBtn.disabled = false;
+              publish.disabled = false;
               updateFields();
             }
           });
@@ -698,19 +555,19 @@ export function renderAdminPage(params: { siteUrl: string }): string {
       // --- Status display ---
 
       function showStatus(message, type) {
-        var status = document.getElementById("status");
+        var status = $("[data-role=status]");
         status.hidden = false;
-        status.className = "status " + type;
+        status.className = "admin-status " + type;
         status.textContent = message;
       }
 
       function showSuccess(url) {
-        var form = document.getElementById("entry-form");
-        var status = document.getElementById("status");
+        var form = $("[data-role=entry-form]");
+        var status = $("[data-role=status]");
 
         form.hidden = true;
         status.hidden = false;
-        status.className = "status success";
+        status.className = "admin-status success flow";
         status.textContent = "";
 
         var msg = document.createElement("p");
@@ -728,15 +585,14 @@ export function renderAdminPage(params: { siteUrl: string }): string {
 
         var btn = document.createElement("button");
         btn.type = "button";
-        btn.className = "action-btn";
         btn.textContent = "New Entry";
         btn.addEventListener("click", resetEditor);
         status.appendChild(btn);
       }
 
       function resetEditor() {
-        var form = document.getElementById("entry-form");
-        var status = document.getElementById("status");
+        var form = $("[data-role=entry-form]");
+        var status = $("[data-role=status]");
 
         form.hidden = false;
         form.reset();
@@ -744,9 +600,7 @@ export function renderAdminPage(params: { siteUrl: string }): string {
         status.textContent = "";
 
         updateFields();
-
-        var publishBtn = document.getElementById("publish-btn");
-        publishBtn.disabled = false;
+        $("[data-role=publish]").disabled = false;
       }
 
       // --- Keyboard shortcuts ---
@@ -776,10 +630,8 @@ export function renderAdminPage(params: { siteUrl: string }): string {
         var params = new URLSearchParams(location.search);
 
         if (params.has("error")) {
-          var desc =
-            params.get("error_description") || "Access was denied.";
           history.replaceState(null, "", "/admin");
-          showLogin(desc);
+          showLogin(params.get("error_description") || "Access was denied.");
           return;
         }
 
@@ -799,26 +651,18 @@ export function renderAdminPage(params: { siteUrl: string }): string {
 
       // --- Event listeners ---
 
-      document
-        .getElementById("sign-in-btn")
-        .addEventListener("click", startLogin);
-      document
-        .getElementById("sign-out-btn")
-        .addEventListener("click", signOut);
-      document
-        .getElementById("entry-form")
-        .addEventListener("submit", publishEntry);
-      document.querySelectorAll('input[name="type"]').forEach(function (radio) {
+      $("[data-action=sign-in]").addEventListener("click", startLogin);
+      $("[data-action=sign-out]").addEventListener("click", signOut);
+      $("[data-role=entry-form]").addEventListener("submit", publishEntry);
+      $$('input[name="type"]').forEach(function (radio) {
         radio.addEventListener("change", updateFields);
       });
-      document.querySelectorAll(".toolbar button").forEach(function (btn) {
+      $$("[data-md]").forEach(function (btn) {
         btn.addEventListener("click", function () {
-          insertMarkdown(btn.dataset.action);
+          insertMarkdown(btn.dataset.md);
         });
       });
-      document
-        .getElementById("content")
-        .addEventListener("keydown", handleKeyboard);
+      $("#content").addEventListener("keydown", handleKeyboard);
 
       init();
     })();
