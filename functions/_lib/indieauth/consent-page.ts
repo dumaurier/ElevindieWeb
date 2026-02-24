@@ -191,7 +191,6 @@ export function renderConsentPage(params: {
       is requesting access to your site.
     </p>
     ${errorBlock}
-    ${scopeCheckboxes}
     <form method="POST" action="/auth">
       <input type="hidden" name="client_id" value="${escapeAttr(params.client_id)}">
       <input type="hidden" name="redirect_uri" value="${escapeAttr(params.redirect_uri)}">
@@ -199,6 +198,7 @@ export function renderConsentPage(params: {
       <input type="hidden" name="code_challenge" value="${escapeAttr(params.code_challenge)}">
       <input type="hidden" name="code_challenge_method" value="${escapeAttr(params.code_challenge_method)}">
       <input type="hidden" name="me" value="${escapeAttr(params.me)}">
+      ${scopeCheckboxes}
       <div class="field">
         <label for="password">Password</label>
         <input type="password" id="password" name="password" required autocomplete="current-password" autofocus>

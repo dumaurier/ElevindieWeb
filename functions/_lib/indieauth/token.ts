@@ -81,9 +81,12 @@ async function handleTokenExchange(
     return errorResponse(400, "invalid_grant", "PKCE verification failed");
   }
 
-  // No scope → should use auth endpoint, not token endpoint
+  // No scope → authentication-only (return identity, no access token)
   if (!authCodeData.scope) {
-    return errorResponse(400, "invalid_grant", "No scope was requested. Use the authorization endpoint for authentication-only.");
+    return new Response(
+      JSON.stringify({ me: authCodeData.me }),
+      { status: 200, headers: { "Content-Type": "application/json" } }
+    );
   }
 
   // Sign JWT
