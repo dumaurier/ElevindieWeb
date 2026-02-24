@@ -5,3 +5,21 @@ dist/
 .env
 .dev.vars
 .DS_Store
+
+# Environment files (wildcard)
+.env.*
+!.env.example
+
+# Wrangler local state
+.wrangler/
+
+# Private keys and certificates
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Service credentials
+credentials.json
+service-account.json
+
