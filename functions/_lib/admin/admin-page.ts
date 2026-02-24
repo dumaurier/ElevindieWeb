@@ -202,10 +202,10 @@ export function renderAdminPage(params: { siteUrl: string }): string {
           <legend>Syndicate to</legend>
         </fieldset>
 
-        <div data-role="status" role="status" aria-live="polite" hidden></div>
-
         <button type="submit" data-role="publish">Publish Note</button>
       </form>
+
+      <div data-role="status" role="status" aria-live="polite" hidden></div>
     </section>
   </main>
 
