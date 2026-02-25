@@ -95,7 +95,7 @@ export function renderConsentPage(params: {
       color: var(--color-fg);
       padding: 0.75rem 1rem;
       border-radius: 0.25rem;
-      border: 2px solid var(--color-fg);
+      border: 2px solid var(--color-bg);
     }
 
     fieldset {

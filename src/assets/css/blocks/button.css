@@ -1,7 +1,7 @@
 /* Button — solid default */
 button,
 .button {
-  display: inline-flex;
+  display: inline-block;
   align-items: center;
   gap: var(--space-2xs);
   padding: var(--space-2xs) var(--space-m);
@@ -17,7 +17,7 @@ button,
 
   &.tag{
     padding: var(--space-2xs);
-    background-color: var(--color-accent);
+    background-color: var(--color-accent); 
     color: var(--color-fg);
     border-radius: 40% 50%;
 
@@ -31,12 +31,12 @@ button,
 
 button:hover,
 .button:hover {
-  opacity: 0.85;
+  
 }
 
 button:active,
 .button:active {
-  opacity: 0.7;
+  
 }
 
 /* Outlined variant */
@@ -52,12 +52,13 @@ button:active,
 }
 
 .button-outline:active {
-  opacity: 0.9;
+  
 }
 
 /* Disabled state */
 button:disabled,
 .button:disabled {
-  opacity: 0.4;
   cursor: not-allowed;
+  background-color: var(--color-fg);
+  border-color: var(--color-accent);
 }

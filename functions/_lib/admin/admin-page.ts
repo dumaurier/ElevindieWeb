@@ -65,6 +65,8 @@ export function renderAdminPage(params: { siteUrl: string }): string {
     }
 
     .toolbar button {
+      min-height: 44px;
+      min-width: 44px;
       padding: var(--space-3xs) var(--space-2xs);
       font-size: var(--size-step--1);
       background-color: transparent;
@@ -112,10 +114,10 @@ export function renderAdminPage(params: { siteUrl: string }): string {
 
     .admin-status.success {
       background-color: var(--color-accent);
-      color: #240a37;
+      color: var(--color-fg);
     }
 
-    .admin-status.success a { color: #240a37; }
+    .admin-status.success a { color: var(--color-fg); }
 
     .admin-status.error {
       background-color: var(--color-border);
@@ -135,12 +137,13 @@ export function renderAdminPage(params: { siteUrl: string }): string {
 </head>
 <body class="admin">
   <main>
+    <a href="#content" class="skip-link">Skip to editor</a>
     <section data-section="login" hidden>
       <div class="admin-center">
         <div class="flow">
           <h1>Admin</h1>
           <p>Sign in to publish to your site.</p>
-          <div data-role="login-error" role="alert" hidden></div>
+          <div data-role="login-error" role="alert" tabindex="-1" hidden></div>
           <button type="button" data-action="sign-in">Sign In</button>
         </div>
       </div>
@@ -148,7 +151,7 @@ export function renderAdminPage(params: { siteUrl: string }): string {
 
     <section data-section="loading" hidden>
       <div class="admin-center">
-        <p>Signing in&hellip;</p>
+        <p role="status" aria-live="polite">Signing in&hellip;</p>
       </div>
     </section>
 
@@ -186,9 +189,9 @@ export function renderAdminPage(params: { siteUrl: string }): string {
           <label for="content">Content</label>
           <div class="toolbar" role="toolbar" aria-label="Markdown formatting">
             <button type="button" data-md="bold" title="Bold (Ctrl+B)" aria-label="Bold"><strong>B</strong></button>
-            <button type="button" data-md="italic" title="Italic (Ctrl+I)" aria-label="Italic"><em>I</em></button>
-            <button type="button" data-md="link" title="Link (Ctrl+K)" aria-label="Insert link">Link</button>
-            <button type="button" data-md="heading" title="Heading" aria-label="Insert heading">H2</button>
+            <button type="button" data-md="italic" title="Italic (Ctrl+I)" aria-label="Italic" tabindex="-1"><em>I</em></button>
+            <button type="button" data-md="link" title="Link (Ctrl+K)" aria-label="Insert link" tabindex="-1">Link</button>
+            <button type="button" data-md="heading" title="Heading" aria-label="Insert heading H2" tabindex="-1">H2</button>
           </div>
           <textarea id="content" rows="12"></textarea>
         </div>
@@ -205,7 +208,7 @@ export function renderAdminPage(params: { siteUrl: string }): string {
         <button type="submit" data-role="publish">Publish Note</button>
       </form>
 
-      <div data-role="status" role="status" aria-live="polite" hidden></div>
+      <div data-role="status" role="status" aria-live="polite" tabindex="-1" hidden></div>
     </section>
   </main>
 
@@ -254,14 +257,17 @@ export function renderAdminPage(params: { siteUrl: string }): string {
           errEl.hidden = false;
           errEl.className = "admin-status error";
           errEl.textContent = error;
+          errEl.focus();
         } else {
           errEl.hidden = true;
+          $("[data-action=sign-in]").focus();
         }
       }
 
       function showEditor() {
         showSection("editor");
         loadSyndicationTargets();
+        $('input[name="type"]:checked').focus();
       }
 
       // --- Auth flow ---
@@ -557,8 +563,10 @@ export function renderAdminPage(params: { siteUrl: string }): string {
       function showStatus(message, type) {
         var status = $("[data-role=status]");
         status.hidden = false;
+        status.setAttribute("role", type === "error" ? "alert" : "status");
         status.className = "admin-status " + type;
         status.textContent = message;
+        status.focus();
       }
 
       function showSuccess(url) {
@@ -588,6 +596,7 @@ export function renderAdminPage(params: { siteUrl: string }): string {
         btn.textContent = "New Entry";
         btn.addEventListener("click", resetEditor);
         status.appendChild(btn);
+        btn.focus();
       }
 
       function resetEditor() {
@@ -598,9 +607,11 @@ export function renderAdminPage(params: { siteUrl: string }): string {
         form.reset();
         status.hidden = true;
         status.textContent = "";
+        status.setAttribute("role", "status");
 
         updateFields();
         $("[data-role=publish]").disabled = false;
+        $('input[name="type"]:checked').focus();
       }
 
       // --- Keyboard shortcuts ---
@@ -663,6 +674,29 @@ export function renderAdminPage(params: { siteUrl: string }): string {
         });
       });
       $("#content").addEventListener("keydown", handleKeyboard);
+
+      // Toolbar: roving tabindex for arrow key navigation
+      (function () {
+        var tb = $("[role=toolbar]");
+        var buttons = Array.from(tb.querySelectorAll("button"));
+        tb.addEventListener("keydown", function (e) {
+          var index = buttons.indexOf(document.activeElement);
+          if (index < 0) return;
+          var next = -1;
+          switch (e.key) {
+            case "ArrowRight": next = (index + 1) % buttons.length; break;
+            case "ArrowLeft": next = (index - 1 + buttons.length) % buttons.length; break;
+            case "Home": next = 0; break;
+            case "End": next = buttons.length - 1; break;
+          }
+          if (next >= 0) {
+            e.preventDefault();
+            buttons[index].setAttribute("tabindex", "-1");
+            buttons[next].setAttribute("tabindex", "0");
+            buttons[next].focus();
+          }
+        });
+      })();
 
       init();
     })();
