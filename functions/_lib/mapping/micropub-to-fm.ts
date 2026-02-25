@@ -26,16 +26,16 @@ export interface ReplyFrontmatter {
 export function toPostFrontmatter(
   properties: Record<string, string[]>
 ): { data: PostFrontmatter; body: string } {
-  const today = new Date().toISOString().split("T")[0];
+  const now = new Date().toISOString();
 
   const tags = ["posts"];
   if (properties.category?.length) {
-    tags.push(...properties.category);
+    tags.push(...properties.category.map((t) => t.toLowerCase()));
   }
 
   const data: PostFrontmatter = {
     title: properties.name[0],
-    date: properties.published?.[0]?.split("T")[0] || today,
+    date: properties.published?.[0] || now,
     tags,
   };
 
@@ -46,15 +46,15 @@ export function toPostFrontmatter(
 export function toNoteFrontmatter(
   properties: Record<string, string[]>
 ): { data: NoteFrontmatter; body: string } {
-  const today = new Date().toISOString().split("T")[0];
+  const now = new Date().toISOString();
 
   const tags = ["notes"];
   if (properties.category?.length) {
-    tags.push(...properties.category);
+    tags.push(...properties.category.map((t) => t.toLowerCase()));
   }
 
   const data: NoteFrontmatter = {
-    date: properties.published?.[0]?.split("T")[0] || today,
+    date: properties.published?.[0] || now,
     tags,
   };
 
@@ -65,17 +65,17 @@ export function toNoteFrontmatter(
 export function toBookmarkFrontmatter(
   properties: Record<string, string[]>
 ): { data: BookmarkFrontmatter; body: string } {
-  const today = new Date().toISOString().split("T")[0];
+  const now = new Date().toISOString();
 
   const tags = ["bookmarks"];
   if (properties.category?.length) {
-    tags.push(...properties.category);
+    tags.push(...properties.category.map((t) => t.toLowerCase()));
   }
 
   const data: BookmarkFrontmatter = {
     title: properties.name?.[0] || properties["bookmark-of"][0],
     bookmarkOf: properties["bookmark-of"][0],
-    date: properties.published?.[0]?.split("T")[0] || today,
+    date: properties.published?.[0] || now,
     tags,
   };
 
@@ -86,16 +86,16 @@ export function toBookmarkFrontmatter(
 export function toReplyFrontmatter(
   properties: Record<string, string[]>
 ): { data: ReplyFrontmatter; body: string } {
-  const today = new Date().toISOString().split("T")[0];
+  const now = new Date().toISOString();
 
   const tags = ["replies"];
   if (properties.category?.length) {
-    tags.push(...properties.category);
+    tags.push(...properties.category.map((t) => t.toLowerCase()));
   }
 
   const data: ReplyFrontmatter = {
     inReplyTo: properties["in-reply-to"][0],
-    date: properties.published?.[0]?.split("T")[0] || today,
+    date: properties.published?.[0] || now,
     tags,
   };
 

@@ -30,6 +30,7 @@ a {
 
 a:visited {
   color: var(--color-link-visited);
+  text-decoration: dotted var(--color-accent);
 }
 
 a:hover {
@@ -84,7 +85,6 @@ img {
 /* === Time === */
 time {
   font-size: var(--size-step-0);
-  opacity: 0.8;
 }
 
 /* === Horizontal rule === */

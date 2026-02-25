@@ -47,7 +47,7 @@
   function renderFacepile(label, items) {
     if (items.length === 0) return '';
     var html = '<section aria-label="' + label + '">';
-    html += '<h3>' + label + ' (' + items.length + ')</h3>';
+    html += '<h2>' + label + ' (' + items.length + ')</h2>';
     html += '<ul role="list">';
     items.forEach(function (item) {
       if (!item.author) return;

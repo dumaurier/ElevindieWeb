@@ -15,7 +15,6 @@ blockquote figcaption {
   display: block;
   font-style: normal;
   font-size: 0.875em;
-  opacity: 0.8;
   margin-block-start: var(--space-s);
 }
 

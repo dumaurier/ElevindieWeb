@@ -23,16 +23,18 @@
   font-display: swap;
 }
 
+
+
 /* Design tokens */
 :root {
   /* === Colors — DuoTone default === */
   --color-bg: #8bbae7;
   --color-fg: #240a37;
   --color-accent: #e7e68b;
-  --color-border: #e78b8c;
+  --color-border: #e78b8c; 
   --color-link: #0f0520;
-  --color-link-visited: #3d1a5c;
-  --color-focus: var(--color-accent);
+  --color-link-visited: #0f0520;
+  --color-focus: #240a37;
   --color-surface: oklch(from var(--color-fg) l c h / 0.08);
 
   /* === Typography === */
@@ -70,9 +72,13 @@
 /* === Dark theme — invert bg/fg, keep accent/border === */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg: #240a37;
-    --color-fg: #8bbae7;
-    --color-link: #a8cef0;
-    --color-link-visited: #7ba4cc;
+  --color-bg: #240a37;
+  --color-fg:  #8bbae7;
+  --color-accent: var(--color-bg);
+  --color-border:  #8bbae7;
+  --color-link: #e7e68b;
+  --color-link-visited:#e7e68b;
+  --color-focus: #e7e68b;
+  --color-surface: oklch(from var(--color-fg) l c h / 0.08);
   }
 }

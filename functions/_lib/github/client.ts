@@ -26,7 +26,9 @@ export class GitHubClient {
     }
 
     const data: GitHubFileResponse = await response.json();
-    const content = atob(data.content.replace(/\n/g, ""));
+    const binary = atob(data.content.replace(/\n/g, ""));
+    const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
+    const content = new TextDecoder().decode(bytes);
     return { content, sha: data.sha };
   }
 

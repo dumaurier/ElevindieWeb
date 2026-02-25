@@ -9,5 +9,4 @@ footer[role="contentinfo"] > * + * {
 
 footer[role="contentinfo"] p:last-child {
   font-size: 0.875em;
-  opacity: 0.8;
 }
