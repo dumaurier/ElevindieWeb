@@ -1,7 +1,7 @@
 /* Button — solid default */
 button,
 .button {
-  display: inline-flex;
+  display: inline-block;
   align-items: center;
   gap: var(--space-2xs);
   padding: var(--space-2xs) var(--space-m);
@@ -58,6 +58,7 @@ button:active,
 /* Disabled state */
 button:disabled,
 .button:disabled {
-  background-color: black;
   cursor: not-allowed;
+  background-color: var(--color-fg);
+  border-color: var(--color-accent);
 }

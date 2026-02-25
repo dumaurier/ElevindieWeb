@@ -33,7 +33,7 @@
   --color-accent: #e7e68b;
   --color-border: #e78b8c; 
   --color-link: #0f0520;
-  --color-link-visited: #3d1a5c;
+  --color-link-visited: #0f0520;
   --color-focus: #240a37;
   --color-surface: oklch(from var(--color-fg) l c h / 0.08);
 

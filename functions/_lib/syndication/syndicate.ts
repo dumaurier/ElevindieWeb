@@ -19,6 +19,8 @@ export interface SyndicateTarget {
 }
 
 const BLUESKY_UID = "https://bsky.social";
+const POLL_INTERVAL_MS = 5_000;
+const POLL_MAX_MS = 120_000;
 
 /**
  * Returns available syndication targets based on configured env vars.
@@ -57,6 +59,24 @@ function formatText(content: SyndicationContent): string {
 }
 
 /**
+ * Poll a URL until it returns 200, so syndicated links aren't dead.
+ * Gives the CF Pages build time to finish before posting to platforms.
+ */
+async function waitForUrl(url: string): Promise<boolean> {
+  const deadline = Date.now() + POLL_MAX_MS;
+  while (Date.now() < deadline) {
+    try {
+      const res = await fetch(url, { method: "HEAD", redirect: "follow" });
+      if (res.ok) return true;
+    } catch {
+      // Network error — keep trying
+    }
+    await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL_MS));
+  }
+  return false;
+}
+
+/**
  * Syndicate content to requested targets and update frontmatter with URLs.
  * Designed to run inside waitUntil — never throws.
  */
@@ -69,6 +89,13 @@ export async function syndicate(
   try {
     const available = getAvailableTargets(env);
     const text = formatText(content);
+
+    const urlIsLive = await waitForUrl(content.url);
+    if (!urlIsLive) {
+      console.error(`Syndication skipped: ${content.url} never became available`);
+      return;
+    }
+
     const promises: Array<Promise<{ uid: string; url: string | null }>> = [];
 
     for (const targetUid of targets) {
