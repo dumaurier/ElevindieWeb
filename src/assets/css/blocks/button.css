@@ -17,7 +17,7 @@ button,
 
   &.tag{
     padding: var(--space-2xs);
-    background-color: var(--color-accent);
+    background-color: var(--color-accent); 
     color: var(--color-fg);
     border-radius: 40% 50%;
 

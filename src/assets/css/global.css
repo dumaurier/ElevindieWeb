@@ -38,7 +38,7 @@ a:hover {
 
 /* === Focus — AAA compliant === */
 :focus-visible {
-  outline: 3px solid var(--color-focus);
+  outline: 3px solid var(--color-bg);
   outline-offset: 3px;
 }
 

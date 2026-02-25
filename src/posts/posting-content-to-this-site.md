@@ -4,8 +4,8 @@ date: 2026-02-25
 tags:
   - posts
   - 11ty
-  - IndieWeb
-  - MicroPub
+  - indieweb
+  - micropub
 syndicatedTo:
   - https://bsky.app/profile/joshvogt.bsky.social/post/3mfovaub4542u
   - https://mastodon.social/@joshvogt/116131734911640534
