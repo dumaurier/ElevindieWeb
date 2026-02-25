@@ -65,6 +65,8 @@ export function renderAdminPage(params: { siteUrl: string }): string {
     }
 
     .toolbar button {
+      min-height: 44px;
+      min-width: 44px;
       padding: var(--space-3xs) var(--space-2xs);
       font-size: var(--size-step--1);
       background-color: transparent;
@@ -188,7 +190,7 @@ export function renderAdminPage(params: { siteUrl: string }): string {
             <button type="button" data-md="bold" title="Bold (Ctrl+B)" aria-label="Bold"><strong>B</strong></button>
             <button type="button" data-md="italic" title="Italic (Ctrl+I)" aria-label="Italic"><em>I</em></button>
             <button type="button" data-md="link" title="Link (Ctrl+K)" aria-label="Insert link">Link</button>
-            <button type="button" data-md="heading" title="Heading" aria-label="Insert heading">H2</button>
+            <button type="button" data-md="heading" title="Heading" aria-label="Insert heading H2">H2</button>
           </div>
           <textarea id="content" rows="12"></textarea>
         </div>
@@ -205,7 +207,7 @@ export function renderAdminPage(params: { siteUrl: string }): string {
         <button type="submit" data-role="publish">Publish Note</button>
       </form>
 
-      <div data-role="status" role="status" aria-live="polite" hidden></div>
+      <div data-role="alert" role="status" aria-live="polite" hidden></div>
     </section>
   </main>
 

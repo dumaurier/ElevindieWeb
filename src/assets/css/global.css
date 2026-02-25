@@ -30,6 +30,7 @@ a {
 
 a:visited {
   color: var(--color-link-visited);
+  text-decoration: dotted var(--color-accent);
 }
 
 a:hover {
@@ -38,7 +39,7 @@ a:hover {
 
 /* === Focus — AAA compliant === */
 :focus-visible {
-  outline: 3px solid var(--color-bg);
+  outline: 3px solid var(--color-focus);
   outline-offset: 3px;
 }
 
@@ -84,7 +85,6 @@ img {
 /* === Time === */
 time {
   font-size: var(--size-step-0);
-  opacity: 0.8;
 }
 
 /* === Horizontal rule === */
