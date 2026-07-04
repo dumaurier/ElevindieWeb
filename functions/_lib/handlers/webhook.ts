@@ -155,6 +155,7 @@ async function processNewFiles(files: Set<string>, env: Env): Promise<void> {
         title: data.title as string | undefined,
         bookmarkUrl: data.bookmarkOf as string | undefined,
         replyToUrl: data.inReplyTo as string | undefined,
+        tags: Array.isArray(data.tags) ? data.tags.map(String) : undefined,
       };
 
       await syndicate(content, allTargetUids, filePath, env);

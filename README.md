@@ -1,143 +1,187 @@
-# ElevIndiWeb
+# ElevIndieWeb
 
-## What This Is
+An [Eleventy 3.x](https://www.11ty.dev/) IndieWeb starter. Minimal, accessible, self-hosted. No bloated starter kits, no Tailwind, no unnecessary dependencies.
 
-An Eleventy 3.x IndieWeb starter built to be minimal, accessible, and easy to customize. No bloated starter kits, no Tailwind, no unnecessary dependencies.
+WCAG 2.2 AAA compliant. Deploys to Cloudflare Pages. Everything runs from a single repo.
 
-## Goals
+## Standing on Shoulders
 
-- Full IndieWeb support out of the box
-- WCAG 2.2 AAA compliance
-- Easy for anyone to clone and make their own
+### Eleventy
 
-## Tech Stack
+[Eleventy](https://www.11ty.dev/) is the static site generator. Nunjucks for templating, Markdown for content. The config is modular — filters, collections, shortcodes, and build events each live in their own files under `src/_config/` and get imported by `eleventy.config.js`.
 
-- **Eleventy 3.x** (latest stable)
-- **Nunjucks & Liquid** templating
-- **Plain CSS** with `@layer` ordering and CUBE CSS methodology
-- **npm** for package management
+### Eleventy Excellent
 
-## IndieWeb Features
+This starter cherry-picks project organization patterns from Lene Saile's [Eleventy Excellent](https://github.com/madrilene/eleventy-excellent). Specifically:
+
+- `_data/meta.js` as a JS file (not JSON) so it can read environment variables
+- `_data/navigation.js` with `top` and `bottom` arrays for data-driven nav
+- `_data/helpers.js` for template-callable utilities (active link state, cache busting)
+- Separate `_layouts/` from `_includes/` via Eleventy's `dir.layouts`
+- Layout aliases (`layout: base` instead of `layout: base.njk`)
+- Split `<head>` into include files
+- `body class="{{ layout }}"` for layout-specific CSS
+- Modular `_config/` with barrel exports
+- OG image generation using SVG templates converted to JPEG via `@11ty/eleventy-img`
+
+We did not take Tailwind, WebC, the design token pipeline, the theme switcher, or any of the CSS implementations. Those are all written from scratch.
+
+### CUBE CSS
+
+The CSS architecture follows [CUBE CSS](https://cube.fyi/) methodology — Composition, Utility, Block, Exception. Native `@layer` ordering controls the cascade:
+
+```css
+@layer reset, variables, global, compositions, blocks, utilities;
+```
+
+28 source CSS files organized into layers. Compositions (flow, cluster, wrapper, repel, region, grid) handle layout. Blocks handle component-specific styles. Utilities handle single-purpose overrides. All our own CSS — plain, no preprocessors, no frameworks.
+
+### Lightning CSS
+
+[Lightning CSS](https://lightningcss.dev/) bundles the 28 source CSS files into a single minified `style.css` at build time via an `eleventy.after` event. It resolves `@import` statements and `@layer` declarations, replacing the entire PostCSS + plugin chain with zero configuration.
+
+## Content Types
+
+Four content types, each with their own directory, directory data file, collection, landing page, and Atom feed:
+
+- **Posts** (`src/posts/`) — titled articles. Slug derived from title.
+- **Notes** (`src/notes/`) — titleless short-form content. Timestamp slugs.
+- **Bookmarks** (`src/bookmarks/`) — links with optional commentary. `bookmarkOf` frontmatter field.
+- **Replies** (`src/replies/`) — responses to other URLs. `inReplyTo` frontmatter field. Timestamp slugs.
+
+Post type is inferred from frontmatter fields following [IndieWeb post type discovery](https://indieweb.org/post-type-discovery): `in-reply-to` → `bookmark-of` → presence of `name` → note (default).
+
+An `allContent` collection merges all four types sorted by date for the home page and universal feed.
+
+## OG Images
+
+Every content item gets a social preview image. An SVG template (`src/common/og-images.njk`) generates one per item during build, using the DuoTone color palette. A build event converts the SVGs to JPEG via `@11ty/eleventy-img`. No headless browser needed.
+
+Each image includes a content type pill (Post, Note, Bookmark, Reply), the title or a content preview for titleless entries, the date, site name, and author.
+
+## IndieWeb
 
 ### Microformats2
 
-The starter uses microformats2 markup throughout:
+The site uses [microformats2](https://microformats.org/) markup throughout:
 
-- **h-card** — your identity, rendered in the footer on every page via `partials/h-card.njk`. Driven by `_data/meta.js` (name, photo, bio, email, rel-me links).
-- **h-entry** — wraps individual content items. Split into three partials for maintainability:
-  - `partials/h-entry.njk` — the wrapper plus core properties (content, date, permalink, author)
-  - `partials/h-entry-meta.njk` — optional properties (title, summary, tags)
-  - `partials/h-entry-interactions.njk` — received webmentions (likes, reposts, replies, bookmarks)
-- **h-feed** — wraps a collection of h-entries via `partials/h-feed.njk`. Content-type agnostic — works with any collection you pass it.
-
-Post types are inferred from which properties are present in front matter, not declared explicitly. A post with a title is an article; without one it's a note. Add `photo` and it's a photo post. This follows the IndieWeb post type discovery algorithm.
+- **h-card** — identity, in the footer on every page. Driven by `_data/meta.js`.
+- **h-entry** — wraps individual content items. Split into three partials:
+  - `h-entry.njk` — wrapper, content, date, permalink, author
+  - `h-entry-meta.njk` — title, summary, tags, bookmark-of, in-reply-to
+  - `h-entry-interactions.njk` — received webmentions
+- **h-feed** — wraps any collection of h-entries. Content-type agnostic.
 
 ### IndieAuth
 
-Authentication via your own domain. The starter defaults to `indieauth.com` endpoints (configurable in `_data/meta.js`). Your `<head>` includes:
+Self-hosted. No external auth service. The authorization and token endpoints run as Cloudflare Functions in the same repo.
 
-- `authorization_endpoint` — where apps send users to sign in
-- `token_endpoint` — for apps that need access tokens (like Micropub clients)
-- `rel="me"` links — in both the `<head>` and the h-card for maximum parser compatibility
+- Password login with constant-time comparison (HMAC equality trick — CF Workers don't have `timingSafeEqual`)
+- PKCE mandatory (S256 only)
+- JWT access tokens signed with HMAC-SHA256 via `crypto.subtle` (30-day expiry, no npm dependencies)
+- Token introspection and revocation (revocation uses a KV blocklist with TTL matching remaining token lifetime)
+- Authorization codes stored in KV with 10-minute TTL
+- Consent page is self-contained HTML with the DuoTone palette
+- Metadata endpoint at `/indieauth-metadata` for modern spec discovery
 
-IndieAuth verifies your identity by checking that your `rel="me"` links (GitHub, Mastodon, etc.) link back to your site.
+Your `<head>` advertises the endpoints and `rel="me"` links for identity verification:
+
+```html
+<link rel="indieauth-metadata" href="/indieauth-metadata">
+<link rel="authorization_endpoint" href="/auth">
+<link rel="token_endpoint" href="/token">
+```
+
+### Micropub
+
+A full [Micropub](https://micropub.spec.indieweb.org/) server and a built-in posting client.
+
+**Server:** The handler at `/micropub` accepts JSON Micropub requests, creates the corresponding Markdown file with frontmatter via the GitHub API, and returns the new URL. Supports create, update, and delete across all four content types. Scoped tokens control access (`create`, `update`, `delete`). The `?q=config` query returns available syndication targets.
+
+**Posting client:** A built-in admin page at `/admin` for creating content directly. Client-side PKCE auth against the self-hosted IndieAuth endpoints. Four post types (note, post, bookmark, reply) with dynamic field visibility. Markdown toolbar (Bold, Italic, Link, H2) with keyboard shortcuts. Syndication target checkboxes fetched from the Micropub config endpoint. Links to the site stylesheet for consistent design — only admin-specific CSS is inlined.
+
+Compatible with any standard Micropub client (tested with [Sparkles](https://sparkles.sploot.com)).
 
 ### Webmentions
 
-Receiving and displaying cross-site interactions, powered by webmention.io.
+Cross-site interactions via [webmention.io](https://webmention.io).
 
-**Receiving — build-time:** The `_data/webmentions.js` file fetches all mentions from webmention.io's API during build (cached for 1 hour). Requires a `WEBMENTION_IO_TOKEN` environment variable. Gracefully skips if not set.
+**Build-time:** `_data/webmentions.js` fetches mentions from the webmention.io API during build (cached 1 hour). Requires `WEBMENTION_IO_TOKEN`. Gracefully skips if not set.
 
-**Receiving — client-side:** The `assets/js/webmentions.js` script fetches live mentions on page load using the public API. This shows mentions received between builds without requiring JS for the build-time content.
+**Client-side:** `assets/js/webmentions.js` fetches live mentions on page load to catch anything received between builds.
 
-**Display:** Received mentions appear at the bottom of any page using the `post` layout, grouped by type:
-- Likes — shown as a facepile (avatars and names)
-- Reposts — shown as a facepile
-- Bookmarks — shown as a list of names
-- Replies — shown with author, date, and content
+**Display:** Mentions appear at the bottom of content pages, grouped by type — likes and reposts as facepiles, bookmarks as a name list, replies with author, date, and content.
 
-**Sending:** Configure [webmention.app](https://webmention.app) with your RSS feed to automatically send webmentions when you publish.
+**Sending:** Configure [webmention.app](https://webmention.app) with your RSS feed to send webmentions automatically on publish.
 
-## Project Structure
+### Syndication (POSSE)
 
-All source files live in `src/`:
+[POSSE](https://indieweb.org/POSSE) — Publish on your Own Site, Syndicate Elsewhere. Content is published to the site first, then cross-posted to other platforms.
 
-- `_layouts/` — base layout and thin content-type layouts (e.g. `post.njk` extends `base.njk` and wraps content in h-entry markup)
-- `_includes/head/` — split `<head>` partials (CSS, meta info, IndieWeb endpoints)
-- `_includes/partials/` — reusable components (header, footer, h-card, h-entry, h-feed, webmentions)
-- `_data/` — global data files:
-  - `meta.js` — site config, author info, IndieAuth and webmention endpoints
-  - `navigation.js` — top/bottom nav arrays
-  - `helpers.js` — template-callable utilities (active link state, cache busting)
-  - `webmentions.js` — build-time webmention fetch
-- `_config/` — modular Eleventy config (filters, collections, shortcodes, events in separate files)
-- `common/` — build-time generators (OG image SVGs)
-- `assets/` — static files (CSS, JS, images, fonts, SVG, OG images)
+Supported targets:
 
-## CSS Architecture
+- **Bluesky** — AT Protocol, raw fetch (no SDK). Handles facets for clickable links using UTF-8 byte offsets.
+- **Mastodon** — Mastodon API, raw fetch.
 
-Plain CSS using native `@layer` for cascade control and the CUBE CSS methodology:
+Two syndication paths:
 
-```
-@layer reset, variables, global, compositions, utilities;
-```
+1. **Micropub** — select syndication targets via `mp-syndicate-to` checkboxes in the admin page or any Micropub client. Runs in the background via `waitUntil` after a successful create.
+2. **Webhook** — a GitHub push webhook processes newly added `.md` files with `syndicate: true` in frontmatter. Validates HMAC-SHA256 signatures.
 
-Composition files (flow, cluster, wrapper, repel, region) are blank stubs ready to be filled in. Per-page CSS is supported via Eleventy's `addBundle('css')`.
+Both paths wait for the post URL to go live before syndicating (polls until the CF Pages build finishes). Syndicated URLs are written back to the file's frontmatter as a `syndicatedTo` array.
+
+## Cloudflare
+
+### Pages
+
+The site deploys to [Cloudflare Pages](https://pages.cloudflare.com/). Eleventy builds into `_site/`, which Pages serves as static files. GitHub auto-deploys on push.
+
+### Functions
+
+All server-side logic runs as [Cloudflare Pages Functions](https://developers.cloudflare.com/pages/functions/) — TypeScript files in the `functions/` directory that Cloudflare maps to URL routes automatically.
+
+Endpoints:
+
+- `/auth` — IndieAuth authorization (consent page + code exchange)
+- `/token` — token exchange, introspection, revocation
+- `/indieauth-metadata` — IndieAuth metadata document
+- `/micropub` — Micropub handler (create, update, delete, query)
+- `/webhook` — GitHub push webhook for direct-commit syndication
+- `/admin` — posting client
+
+KV namespace (`INDIEAUTH_KV`) stores authorization codes and revoked token JTIs. Content is managed via the GitHub API — no database, the repo is the source of truth.
 
 ## Configuration
 
-All site-specific values live in `_data/meta.js`:
+Two configuration surfaces.
+
+### `src/_data/meta.js`
+
+Site-level config used by Eleventy at build time:
 
 - Site name, description, language
 - Author name, email, photo, bio
 - `rel="me"` links for identity verification
-- IndieAuth endpoints (default: indieauth.com)
-- Webmention endpoint (default: webmention.io)
+- IndieAuth, Micropub, and webmention endpoint paths
 
-Navigation is in `_data/navigation.js` with `top` (header) and `bottom` (footer) arrays.
+Navigation lives in `src/_data/navigation.js` with `top` (header) and `bottom` (footer) arrays.
 
-## OG Images
+### `wrangler.toml`
 
-Each post automatically gets a social preview image. An SVG template (`common/og-images.njk`) generates one per post during build, then `svg-to-jpeg` converts them. No headless browser needed.
+Cloudflare deployment config. Non-secret environment variables go in the `[vars]` section:
 
-## Getting Started
+- `URL` / `SITE_URL` — your site's canonical URL
+- `ME` — your IndieWeb identity URL
+- `GITHUB_REPO_OWNER` / `GITHUB_REPO_NAME` / `GITHUB_BRANCH` — where content lives
+- `TOKEN_ENDPOINT` — full URL to your token endpoint
+- `BLUESKY_HANDLE` / `MASTODON_INSTANCE_URL` — syndication targets (optional)
 
-1. Clone this repo
-2. Run `npm install`
-3. Edit `src/_data/meta.js` with your info
-4. Edit `src/_data/navigation.js` with your nav links
-5. Run `npm start` for the dev server
-6. Create posts in `src/posts/`
+Secrets are set via the Cloudflare dashboard (Workers & Pages > Settings > Variables and Secrets):
 
-For webmentions, set `WEBMENTION_IO_TOKEN` in your environment and sign up at [webmention.io](https://webmention.io).
-
-For webmention sending, set up [webmention.app](https://webmention.app) with your RSS feed URL.
-
-## What We Took from Eleventy Excellent
-
-This starter cherry-picks conventions from Lene Saile's [Eleventy Excellent](https://github.com/madrilene/eleventy-excellent) — specifically the project organization patterns, not the styling or plugin choices.
-
-### Adopted
-
-- **`_data/meta.js`** as a JS file (not JSON) so it can read environment variables — single source of truth for site config
-- **`_data/navigation.js`** with `top` and `bottom` arrays for data-driven navigation
-- **`_data/helpers.js`** for template-callable utility functions (`getLinkActiveState` for aria-current on nav links, `random` for cache-busting hashes)
-- **Separate `_layouts/` directory** from `_includes/` via Eleventy's `dir.layouts` config
-- **Layout aliases** so front matter uses `layout: base` instead of `layout: base.njk`
-- **Split `<head>` into include files** for maintainability
-- **`body class="{{ layout }}"` pattern** for layout-specific CSS targeting
-- **CUBE CSS methodology** (flow, cluster, wrapper, repel, region compositions) — but with our own CSS, not Excellent's implementation
-- **CSS `@layer` ordering** for explicit cascade control
-- **Per-page CSS** via Eleventy's `addBundle('css', { hoist: true })`
-- **Modular `_config/` directory** with filters, collections, shortcodes, and events in separate files with barrel exports
-- **YAML data extension** for mixed data formats in `_data/`
-- **OG image generation** using SVG templates converted to JPEG via `@11ty/eleventy-img` (no headless browser)
-
-### Deliberately Left Out
-
-- Tailwind CSS and the design token → Tailwind pipeline
-- WebC components
-- The `clamp-generator.js` and `tokens-to-tailwind.js` utilities
-- Theme switcher, easter eggs, GitHub data fetching
-- Any plugins that replicate default Eleventy functionality
-- The actual CSS in Excellent's composition files
+- `GITHUB_TOKEN` — GitHub personal access token with repo scope
+- `AUTH_PASSWORD` — password for IndieAuth login
+- `JWT_SECRET` — random string for JWT signing
+- `BLUESKY_APP_PASSWORD` — Bluesky app password (optional)
+- `MASTODON_ACCESS_TOKEN` — Mastodon access token (optional)
+- `GITHUB_WEBHOOK_SECRET` — shared secret for push webhook (optional)
+- `WEBMENTION_IO_TOKEN` — webmention.io API token (optional)

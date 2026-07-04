@@ -3,6 +3,8 @@ import { GitHubClient } from "../github/client.js";
 import { parse, serialize } from "../utils/frontmatter.js";
 import { syndicateToBluesky } from "./bluesky.js";
 import { syndicateToMastodon } from "./mastodon.js";
+// @ts-expect-error - meta.js is a JS configuration file outside functions directory
+import meta from "../../../src/_data/meta.js";
 
 export interface SyndicationContent {
   body: string;
@@ -11,6 +13,7 @@ export interface SyndicationContent {
   title?: string;
   bookmarkUrl?: string;
   replyToUrl?: string;
+  tags?: string[];
 }
 
 export interface SyndicateTarget {
@@ -20,7 +23,7 @@ export interface SyndicateTarget {
 
 const BLUESKY_UID = "https://bsky.social";
 const POLL_INTERVAL_MS = 5_000;
-const POLL_MAX_MS = 120_000;
+const POLL_MAX_MS = 15_000;
 
 /**
  * Returns available syndication targets based on configured env vars.
@@ -46,15 +49,28 @@ export function getAvailableTargets(env: Env): SyndicateTarget[] {
  * Format post text for syndication based on content type.
  */
 function formatText(content: SyndicationContent): string {
+  // Retrieve whitelist from meta.js (fallback to empty array if undefined)
+  const socialWhitelist: string[] = meta.socialWhitelist || [];
+
+  const hashtags = (content.tags || [])
+    .filter((tag) => socialWhitelist.includes(tag.toLowerCase()))
+    .map((tag) => {
+      const words = tag.split(/[-_\s]+/);
+      return "#" + words.map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join("");
+    })
+    .join(" ");
+
+  const tagsSuffix = hashtags ? `\n\n${hashtags}` : "";
+
   switch (content.contentType) {
     case "post":
-      return `"${content.title}"\n\n${content.url}`;
+      return `"${content.title}"\n\n${content.url}${tagsSuffix}`;
     case "note":
-      return `${content.body}\n\n${content.url}`;
+      return `${content.body}${tagsSuffix}\n\n${content.url}`;
     case "bookmark":
-      return `Bookmarked: ${content.title}\n${content.bookmarkUrl}\n\n${content.url}`;
+      return `Bookmarked: ${content.title}\n${content.bookmarkUrl}${tagsSuffix}\n\n${content.url}`;
     case "reply":
-      return `Re: ${content.replyToUrl}\n\n${content.body}\n\n${content.url}`;
+      return `Re: ${content.replyToUrl}\n\n${content.body}${tagsSuffix}\n\n${content.url}`;
   }
 }
 
@@ -92,8 +108,7 @@ export async function syndicate(
 
     const urlIsLive = await waitForUrl(content.url);
     if (!urlIsLive) {
-      console.error(`Syndication skipped: ${content.url} never became available`);
-      return;
+      console.warn(`Syndication: URL ${content.url} not live yet after 15s, proceeding anyway.`);
     }
 
     const promises: Array<Promise<{ uid: string; url: string | null }>> = [];

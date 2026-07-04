@@ -69,6 +69,7 @@ export async function handleMicropub(
             contentType: "reply",
             title: micropubReq.properties.name?.[0],
             replyToUrl: micropubReq.properties["in-reply-to"][0],
+            tags: micropubReq.properties.category,
           };
         }
       } else if (micropubReq.properties["bookmark-of"]?.[0]) {
@@ -80,6 +81,7 @@ export async function handleMicropub(
             contentType: "bookmark",
             title: micropubReq.properties.name?.[0] || micropubReq.properties["bookmark-of"][0],
             bookmarkUrl: micropubReq.properties["bookmark-of"][0],
+            tags: micropubReq.properties.category,
           };
         }
       } else if (micropubReq.properties.name?.[0]) {
@@ -90,6 +92,7 @@ export async function handleMicropub(
             url: response.headers.get("Location")!,
             contentType: "post",
             title: micropubReq.properties.name[0],
+            tags: micropubReq.properties.category,
           };
         }
       } else {
@@ -99,6 +102,7 @@ export async function handleMicropub(
             body: micropubReq.properties.content?.[0] || "",
             url: response.headers.get("Location")!,
             contentType: "note",
+            tags: micropubReq.properties.category,
           };
         }
       }

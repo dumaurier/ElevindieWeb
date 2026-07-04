@@ -10,6 +10,9 @@ dist/
 .env.*
 !.env.example
 
+# Claude Code
+CLAUDE.md
+
 # Wrangler local state
 .wrangler/
 
