@@ -6,6 +6,9 @@ tags:
   - indieweb
   - micropub. eleventy
   - posse
+syndicatedTo:
+  - https://bsky.app/profile/joshvogt.bsky.social/post/3mpsyco2pds2e
+  - https://mastodon.social/@joshvogt/116861533157311478
 ---
 I've been using this starter on another project and found some things I wanted to fix. There was a timeout issue on POSSE syndication and I added a small enhancement to posts/notes/bookmarks syndication.
 
