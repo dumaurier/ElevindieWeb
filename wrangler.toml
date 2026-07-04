@@ -11,7 +11,7 @@ SITE_URL = "https://elevindieweb.pages.dev"
 ME = "https://elevindieweb.pages.dev/"
 GITHUB_REPO_OWNER = "dumaurier"
 GITHUB_REPO_NAME = "ElevindieWeb"
-GITHUB_BRANCH = "main"
+GITHUB_BRANCH = "demo"
 TOKEN_ENDPOINT = "https://elevindieweb.pages.dev/token"
 
 # Syndication — uncomment and fill in to enable POSSE
