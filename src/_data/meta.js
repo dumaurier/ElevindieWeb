@@ -41,17 +41,14 @@ module.exports = {
   },
   // Whitelist of tags allowed to be syndicated as hashtags on Mastodon & Bluesky
   socialWhitelist: [
-    "productivity",
-    "adhd",
-    "mental-health",
+    "indieweb",
+    "POSSE",
+    "indieauth",
     "privacy",
     "security",
-    "executive-function",
-    "executive-dysfunction",
     "open-source",
     "indieweb",
     "pwa",
-    "brain-fog",
     "data-sovereignty",
     "digital-rights",
     "decentralization"
