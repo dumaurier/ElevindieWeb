@@ -1,5 +1,5 @@
 name = "11ndtyweb"
-compatibility_date = "2024-01-01"
+compatibility_date = "2026-01-01"
 pages_build_output_dir = "_site"
 
 # Non-secret environment variables

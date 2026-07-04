@@ -1,4 +1,4 @@
-const url = process.env.URL || 'http://localhost:8080';
+const url = (typeof process !== 'undefined' && process.env && process.env.URL) || 'http://localhost:8080';
 const domain = new URL(url).hostname;
 
 module.exports = {
@@ -38,5 +38,22 @@ module.exports = {
   // Micropub endpoint — for publishing from Micropub clients
   micropub: {
     endpoint: '/micropub'
-  }
+  },
+  // Whitelist of tags allowed to be syndicated as hashtags on Mastodon & Bluesky
+  socialWhitelist: [
+    "productivity",
+    "adhd",
+    "mental-health",
+    "privacy",
+    "security",
+    "executive-function",
+    "executive-dysfunction",
+    "open-source",
+    "indieweb",
+    "pwa",
+    "brain-fog",
+    "data-sovereignty",
+    "digital-rights",
+    "decentralization"
+  ]
 };
